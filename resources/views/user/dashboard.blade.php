@@ -5,7 +5,7 @@
         overflow-x: auto;
         -webkit-overflow-scrolling: touch;
     }
-
+w
     .history-table {
         width: 100%;
         min-width: 600px;
@@ -97,7 +97,7 @@
     <div class="dashboard-header">
         <h1>Welcome back, <span>{{Auth::user()->name}}</span></h1>
         <div class="dashboard-quick-actions">
-            <a href="/user/invest" class="btn-action btn-deposit">
+            <a href="#" class="btn-action btn-deposit">
                 <svg xmlns="http://www.w3.org/2000/svg" width="20"
                     height="20" viewBox="0 0 24 24" fill="none"
                     stroke="currentColor" stroke-width="2"
@@ -109,7 +109,7 @@
                 </svg>
                 Make a Deposit
             </a>
-            <a href="/user/payment" class="btn-action btn-withdraw">
+            <a href="#" class="btn-action btn-withdraw">
                 <svg xmlns="http://www.w3.org/2000/svg" width="20"
                     height="20" viewBox="0 0 24 24" fill="none"
                     stroke="currentColor" stroke-width="2"

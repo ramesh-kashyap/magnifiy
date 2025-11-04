@@ -174,7 +174,7 @@
       .ops-card,
       .dashboard-card {
           background: #2c2c2c;
-          border: 1px solid #595a5bff;
+          border: 1px solid #202223;
           border-radius: 20px;
           padding: 16px;
           margin-top: 16px;
@@ -310,6 +310,9 @@
               grid-template-columns: 1fr;
           }
       }
+         table tbody tr:hover {
+    background-color: transparent !important;
+}
   </style>
   <main class="referral-wrapper">
       <!-- <div class="page-header">

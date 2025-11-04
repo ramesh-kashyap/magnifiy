@@ -401,7 +401,7 @@
                     partners in your structure.</p>
             </div>
         </div>
-    </div>
+    </div>                                                      
     <div class="referral-button-wrapper desktop-only">
         <a href="{{ route('login') }}" class="get-button referral-button">
             <div class="text-block-3">Get Your Link</div>
@@ -832,7 +832,7 @@
             <div class="your-contacts-block">
                 <h3 class="heading-10">YOUR CONTACTS</h3>
                 <div class="w-form">
-                    <form method="post" action="index.html">
+                    <form method="post" action="">
                         <input type="hidden" name="csrf" value="0b79d92eb288ceca23b6f072b5f81fcd">
                         <input type="hidden" name="from" value="/">
                         <div class="div-block-36" bis_skin_checked="1">
@@ -893,9 +893,9 @@
             <div>
                 <h4 class="heading-h4">Menu</h4>
                 <div bis_skin_checked="1" class="footer-link-block">
-                    <a href="#" class="footer-link">Home</a>
+                    <a href="{{ route('Index') }}" class="footer-link">Home</a>
                     <a href="{{ route('about-us') }}" class="footer-link">About</a>
-                    <a href="faq/index.html" class="footer-link">FAQ</a>
+                    <a href="{{ route('faq') }}" class="footer-link">FAQ</a>
                     <a href="#contact" class="footer-link">Contact</a>
                     <a href="#plans" class="footer-link">Plans</a>
                 </div>

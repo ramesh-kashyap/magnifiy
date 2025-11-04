@@ -5,7 +5,7 @@
         <link rel="icon" type="image/png" href="/favicon-96x96.png"
             sizes="96x96">
         <link rel="icon" type="image/svg+xml" href="/favicon.svg">
-        <link rel="shortcut icon" href="/favicon.ico">
+    <link rel="shortcut icon" href="{{asset('')}}assets/favicon.ico" />
         <link rel="apple-touch-icon" sizes="180x180"
             href="/apple-touch-icon.png">
         <meta name="apple-mobile-web-app-title" content="TeMining">
@@ -169,9 +169,9 @@
             --card-bg: #fff;
             --card-dark-bg: #3d4348;
             --border-radius: 20px;
-            --glow-shadow: 0 12px 48px rgba(244, 161, 89, 0.25);
+            --glow-shadow: 0 12px 48px rgba(110, 71, 226, 0.25);
             --futuristic-glow: 
-              radial-gradient(140px 60px at 120% -10%, rgba(244,161,89,.45), rgba(244,161,89,0) 70%) no-repeat,
+              radial-gradient(140px 60px at 120% -10%, rgba(134, 70, 224, 0.45), rgba(244,161,89,0) 70%) no-repeat,
               radial-gradient(220px 120px at -10% 110%, rgba(48,54,59,.08), rgba(48,54,59,0) 70%) no-repeat;
         }
 
@@ -624,7 +624,7 @@
            SIDEBAR: REFERRAL & TRANSACTIONS
            =================================================================== */
         .referral-card .ref-link-wrapper {
-            background-color: var(--background);
+            background-color: #272626;
             padding: 10px 15px;
             border-radius: 12px;
             display: flex;
