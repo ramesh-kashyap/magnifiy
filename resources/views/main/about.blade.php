@@ -8,7 +8,7 @@
     <title>Magnifly: Your Gateway to Digital Asset Investment</title>
     <link rel="icon" type="image/png" href="../favicon-96x96.png" sizes="96x96" />
     <link rel="icon" type="image/svg+xml" href="../favicon.svg" />
-    <link rel="shortcut icon" href="../favicon.ico" />
+    <link rel="shortcut icon" href="{{asset('')}}assets/favicon.ico" />
     <link rel="apple-touch-icon" sizes="180x180" href="../apple-touch-icon.png" />
     <meta name="apple-mobile-web-app-title" content="Magnifly" />
     <link rel="manifest" href="../site.webmanifest.txt" />
@@ -979,149 +979,11 @@
                     <div class="review-submission-wrapper">
                         <div class="login-prompt">
                             <p>Please log in to leave a Review.</p>
-                            <a href="../login/index.html" class="review-submit-btn login-btn">Log In</a>
+                            <a href="{{route('login')}}" class="review-submit-btn login-btn">Log In</a>
                         </div>
                     </div>
 
-                    <h2 style="margin-top: 80px;">What Our Clients Say</h2>
-                    <div class="testimonials-grid">
-                        <div class="testimonial-card">
-                            <p class="testimonial-text">"Paying instantly: 106.6 USDT
-                                https://bscscan.com/tx/0x5cfb9cb49e202aca2a3941b748fdacb3e7c8b76faabe330d70b9efd8d5642699"
-                            </p>
-                            <div class="testimonial-author">
-
-                                <div>
-                                    <div class="author-name">Invest-tracing</div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="testimonial-card">
-                            <p class="testimonial-text">"?? Magnifly ?? Paying !!
-                                My PROFIT: ROI 108%
-                                Primo Ciclo Completato, e si prosegue:
-                                Hi Maxidvd,
-                                10.00$ has been successfully sent to your Tron Account,
-                                Transaction: b23aea8bac1fff6d4ddc149af671e8896f9bf84ed69ca6e8f5ffefce35b616a2"</p>
-                            <div class="testimonial-author">
-
-                                <div>
-                                    <div class="author-name">maxidvd</div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="testimonial-card">
-                            <p class="testimonial-text">
-                                "https://tronscan.org/#/transaction/12ff527ad8e60bb1e610dfb030a40599d39a61a7d6f8caa0843215ea3649d0ed"
-                            </p>
-                            <div class="testimonial-author">
-
-                                <div>
-                                    <div class="author-name">Instant-Monitor</div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="testimonial-card">
-                            <p class="testimonial-text">
-                                "https://blockchair.com/litecoin/transaction/291756b7d763394bb4f765fb178564becfb441f0b2caef2e55b605f4749b31ef"
-                            </p>
-                            <div class="testimonial-author">
-
-                                <div>
-                                    <div class="author-name">Instant-Monitor</div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="testimonial-card">
-                            <p class="testimonial-text">
-                                "https://bscscan.com/tx/0x356e3937487b599aacfeaabfd758317d892a864c8dee33cb032e3806c3e75c21"
-                            </p>
-                            <div class="testimonial-author">
-
-                                <div>
-                                    <div class="author-name">Instant-Monitor</div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="testimonial-card">
-                            <p class="testimonial-text">
-                                "https://tronscan.org/#/transaction/f974c69e09208afafd66e9fa708231356672dc83a4866f7f7fdac21328f0c68d"
-                            </p>
-                            <div class="testimonial-author">
-
-                                <div>
-                                    <div class="author-name">Instant-Monitor</div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="testimonial-card">
-                            <p class="testimonial-text">
-                                "https://bscscan.com/tx/0xdb91a1000b4fccd8d9c1b7e8af04cde2638b88495ac2f6cebcc824bd62a0ccef"
-                            </p>
-                            <div class="testimonial-author">
-
-                                <div>
-                                    <div class="author-name">Instant-Monitor</div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="testimonial-card">
-                            <p class="testimonial-text">"Проект платит: +52.43 USDT
-                                Oct-09-2025 06:03:14 PM
-                                Tx: 0x27489559d04b5ba80608acc50ad12d176b54672024305da798492f1a89f53682"</p>
-                            <div class="testimonial-author">
-
-                                <div>
-                                    <div class="author-name">Lordborg</div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="testimonial-card">
-                            <p class="testimonial-text">"We have processed your withdrawal request.
-                                Amount 20.25000000 TRX
-                                System TRON
-                                Wallet TGM2&hellip;y8Y3
-                                Date 2025-10-09 16:48
-                                Transaction c60d292941b961672608170cada189fb734a72833050ebd7033aab1ab2bffcea"</p>
-                            <div class="testimonial-author">
-
-                                <div>
-                                    <div class="author-name">Greta</div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="testimonial-card">
-                            <p class="testimonial-text">"We have processed your withdrawal request.
-                                Amount 54.00000000 TRX
-                                System TRON
-                                Wallet TGM2&hellip;y8Y3
-                                Date 2025-10-09 04:50
-                                Transaction a546b413aeceb9d92cb2342b12708d22a78c230b0776fc40093d605834989bb8"</p>
-                            <div class="testimonial-author">
-
-                                <div>
-                                    <div class="author-name">Greta</div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="pagination-wrapper">
-                        <div class="Zebra_Pagination">
-                            <ol class="pagination">
-                                <li class="page-item disabled"><a href="javascript:void(0)"
-                                        class="page-link">&#8249;</a></li>
-                                <li class="page-item active"><a href="index.html" class="page-link">1</a></li>
-                                <li class="page-item"><a href="index%EF%B9%96pagination=2.html"
-                                        class="page-link">2</a></li>
-                                <li class="page-item"><a href="index%EF%B9%96pagination=3.html"
-                                        class="page-link">3</a></li>
-                                <li class="page-item"><a href="index%EF%B9%96pagination=2.html"
-                                        class="page-link">&#8250;</a></li>
-                            </ol>
-                        </div>
-                    </div>
-
+               
                   
 
                 </div>

@@ -5,7 +5,7 @@
     <link rel="stylesheet" href="{{asset('')}}assets/styles.css">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Magnifly: Your Gateway to Digital Asset Investment</title>
+    <title>{{sitename()}}: Your Gateway to Digital Asset Investment</title>
     <link rel="icon" type="image/png" href="favicon-96x96.png" sizes="96x96" />
     <link rel="icon" type="image/svg+xml" href="{{asset('')}}assets/favicon.svg" />
     <link rel="shortcut icon" href="{{asset('')}}assets/favicon.ico" />

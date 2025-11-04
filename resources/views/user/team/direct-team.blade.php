@@ -315,6 +315,10 @@
     .btn-reset:hover {
         background: #383636ff;
     }
+    table tbody tr:hover {
+    background-color: transparent !important;
+}
+
 </style>
 <main class="referral-wrapper">
     <div class="page-header">
@@ -390,7 +394,7 @@
                 </thead>
                 <tbody>
                     @forelse($direct_team as $key => $deposit)
-                    <tr style="color: gray;">
+                    <tr style="color: gray;" >
                         <td>{{ $key + 1 }}</td>
                         <!-- <td>${{ number_format($deposit->amount, 2) }}</td> -->
                         <!-- <td>{{ \Carbon\Carbon::parse($deposit->created_at)->format('d M Y') }}</td> -->
