@@ -154,8 +154,8 @@ li.list-group-item.d-flex.px-0.justify-content-between {
 								<div class="card">
 									<div class="card-body d-flex align-items-center justify-content-between">
 										<div class="menu">
-											<span class="font-w500 fs-16 d-block mb-2">Order Revenue</span>
-											<h2>{{currency()}}  {{  number_format((\App\Models\Income::where('remarks','Order Revenue')->sum('comm')),2)   }}  </h2>
+											<span class="font-w500 fs-16 d-block mb-2">Trading Income</span>
+											<h2>{{currency()}}  {{  number_format((\App\Models\Income::where('remarks','Trading Bonus')->sum('comm')),2)   }}  </h2>
 										</div>	
 										<div class="d-inline-block position-relative donut-chart-sale">
 											
@@ -170,7 +170,7 @@ li.list-group-item.d-flex.px-0.justify-content-between {
 									<div class="card-body d-flex align-items-center justify-content-between">
 										<div class="menu">
 											<span class="font-w500 fs-16 d-block mb-2">Generation Income</span>
-											<h2>{{currency()}} {{  number_format((\App\Models\Income::where('remarks','Generation Income')->sum('comm')),2)   }} </h2>
+											<h2>{{currency()}} {{  number_format((\App\Models\Income::where('remarks','Generation Income ')->sum('comm')),2)   }} </h2>
 										</div>	
 										<div class="d-inline-block position-relative donut-chart-sale">
 										
@@ -184,8 +184,8 @@ li.list-group-item.d-flex.px-0.justify-content-between {
 								<div class="card">
 									<div class="card-body d-flex align-items-center justify-content-between">
 										<div class="menu">
-											<span class="font-w500 fs-16 d-block mb-2">Rank & Reward</span>
-											<h2>{{currency()}} {{  number_format((\App\Models\Income::where('remarks','Rank Reward Income')->sum('comm')),2)   }} </h2>
+											<span class="font-w500 fs-16 d-block mb-2">Binary Bonus</span>
+											<h2>{{currency()}} {{  number_format((\App\Models\Income::where('remarks','Binary Bonus')->sum('comm')),2)   }} </h2>
 										</div>	
 										<div class="d-inline-block position-relative donut-chart-sale">
 										
@@ -199,8 +199,23 @@ li.list-group-item.d-flex.px-0.justify-content-between {
 								<div class="card">
 									<div class="card-body d-flex align-items-center justify-content-between">
 										<div class="menu">
-											<span class="font-w500 fs-16 d-block mb-2">Global Royalty</span>
-											<h2>{{currency()}} {{  number_format((\App\Models\Income::where('remarks','Global Royalty')->sum('comm')),2)   }} </h2>
+											<span class="font-w500 fs-16 d-block mb-2">Level Bonus</span>
+											<h2>{{currency()}} {{  number_format((\App\Models\Income::where('remarks','Level Bonus')->sum('comm')),2)   }} </h2>
+										</div>	
+										<div class="d-inline-block position-relative donut-chart-sale">
+										
+                                                <img src="{{asset('admin/images/medal.png')}}" style="    width: 61px;" alt="">
+									
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="col-xl-3 col-sm-3">
+								<div class="card">
+									<div class="card-body d-flex align-items-center justify-content-between">
+										<div class="menu">
+											<span class="font-w500 fs-16 d-block mb-2">Matching Income</span>
+											<h2>{{currency()}} {{  number_format((\App\Models\Income::where('remarks','Matching Bonus')->sum('comm')),2)   }} </h2>
 										</div>	
 										<div class="d-inline-block position-relative donut-chart-sale">
 										
@@ -214,8 +229,8 @@ li.list-group-item.d-flex.px-0.justify-content-between {
 								<div class="card">
 									<div class="card-body d-flex align-items-center justify-content-between">
 										<div class="menu">
-											<span class="font-w500 fs-16 d-block mb-2">Referral Bonus</span>
-											<h2>{{currency()}} {{  number_format((\App\Models\Income::where('remarks','Referral Bonus')->sum('comm')),2)   }} </h2>
+											<span class="font-w500 fs-16 d-block mb-2">Royalty Bonus</span>
+											<h2>{{currency()}} {{  number_format((\App\Models\Income::where('remarks','Royalty Bonus')->sum('comm')),2)   }} </h2>
 										</div>	
 										<div class="d-inline-block position-relative donut-chart-sale">
 										
