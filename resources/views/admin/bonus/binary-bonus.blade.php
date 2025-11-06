@@ -8,7 +8,7 @@
 				<div class="row page-titles">
 					<ol class="breadcrumb">
 						<li class="breadcrumb-item active"><a href="javascript:void(0)">Profit Summery </a></li>
-						<li class="breadcrumb-item"><a href="javascript:void(0)">Matching Bonus</a></li>
+						<li class="breadcrumb-item"><a href="javascript:void(0)">Binary Bonus</a></li>
 					</ol>
                 </div>
                 <!-- row -->
@@ -18,15 +18,17 @@
                     <div class="col-12">
                         <div class="card">
                             <div class="card-header">
-                                <h4 class="card-title">Matching Bonus</h4>
+                                <h4 class="card-title">Binary Bonus</h4>
                             </div>
                             <div class="card-body">
-                                  <form action="{{ route('admin.reward-bonus') }}" method="GET" class="mb-3">
+                                   
+
+                                     <form action="{{ route('admin.binary-bonus') }}" method="GET" class="mb-3">
                             <div class="row align-items-end">
                                 <!-- Heading + Reset button -->
                                 <div class="col-xl-12 d-flex justify-content-between align-items-center mb-2">
                                     <h5 class="mb-0">Filter Trading Bonus</h5>
-                                    <a href="{{ route('admin.reward-bonus') }}" 
+                                    <a href="{{ route('admin.binary-bonus') }}" 
                                        class="btn btn-secondary btn-sm"
                                        style="padding: 0.4rem 1rem;">
                                        Reset
@@ -79,6 +81,8 @@
                                 </div>
                             </div>
                         </form>
+
+                                    
                                 <div class="table-responsive">
                                     <table id="example" class="display" style="min-width: 845px">
                                         <thead>
@@ -118,6 +122,11 @@
                                                 </tbody>
                                        
                                     </table>
+                                    
+                                      <br>
+
+                                    {{ $level_incomes->withQueryString()->links() }}
+                                    
                                 </div>
                             </div>
                         </div>

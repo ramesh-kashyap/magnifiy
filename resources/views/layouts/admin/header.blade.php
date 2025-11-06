@@ -255,6 +255,11 @@ table#example {
                         <i class="flaticon-072-printer"></i>
                         <span class="nav-text">User Activation </span>
                     </a>
+                </li> 
+                  <li><a href="{{route('admin.power-activation')}}" class="ai-icon" aria-expanded="false">
+                        <i class="flaticon-072-printer"></i>
+                        <span class="nav-text">Power Activation </span>
+                    </a>
                 </li>  
                 <!--    <li><a class="has-arrow ai-icon" href="javascript:void()" aria-expanded="false">-->
                 <!--        <i class="flaticon-043-menu"></i>-->
@@ -284,10 +289,12 @@ table#example {
                             <li><a href="{{ route('admin.roi-bonus') }}">Trading  Income</a></li>
                           
                             <li><a href="{{ route('admin.level-bonus') }}">Generation Income</a></li>
-                            <li><a href="{{route('admin.reward-bonus')}}">Rank & Reward Bonus</a></li>
+                            <li><a href="{{route('admin.reward-bonus')}}">Matching Bonus</a></li>
                             <!--<li><a href="{{route('admin.booster-bonus')}}">Daily Incentive</a></li>-->
-                            <li><a href="{{route('admin.club-bonus')}}">Direct  Income</a></li>
+                            <li><a href="{{route('admin.club-bonus')}}">Level  Income</a></li>
                             <li><a href="{{route('admin.activities-bonus')}}">Royalty Bonus</a></li>
+                            <li><a href="{{route('admin.binary-bonus')}}">Binary Bonus</a></li>
+
 
                         </ul>
                     </li>

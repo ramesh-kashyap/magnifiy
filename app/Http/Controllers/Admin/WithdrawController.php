@@ -100,33 +100,49 @@ class WithdrawController extends Controller
     }
 
 
-    public function approvedWithdrawal(Request $request)
-    {
-        $limit = $request->limit ? $request->limit : paginationLimit();
-        $status = $request->status ? $request->status : null;
-        $search = $request->search ? $request->search : null;
-        $notes = Withdraw::where('status','Approved')->orderBy('id', 'DESC');
+   public function approvedWithdrawal(Request $request)
+{
+    $limit = $request->limit ? $request->limit : paginationLimit();
+    $status = $request->status ? $request->status : null;
+    $search = $request->search ? $request->search : null;
+    $from_date = $request->from_date;
+    $to_date = $request->to_date;
 
-        if($search <> null && $request->reset!="Reset")
-        {
-        $notes = $notes->where(function($q) use($search){
-            $q->Where('user_id_fk', 'LIKE', '%' . $search . '%')
-            ->orWhere('amount', 'LIKE', '%' . $search . '%')
-            ->orWhere('user_id_fk', 'LIKE', '%' . $search . '%')
-            ->orWhere('txn_id', 'LIKE', '%' . $search . '%')
-            ->orWhere('wdate', 'LIKE', '%' . $search . '%');
-          });
-          }
-        $notes = $notes->paginate($limit)
-            ->appends([
-                'limit' => $limit
-            ]);
+    $notes = Withdraw::where('status', 'Approved')->orderBy('id', 'DESC');
 
-        $this->data['withdraw_list'] =  $notes;
-        $this->data['search'] = $search;
-        $this->data['page'] = 'admin.withdraw.approved-withdraw';
-        return $this->admin_dashboard();
+    // 🔍 Search Filter
+    if ($search && $request->reset != "Reset") {
+        $notes = $notes->where(function($q) use($search) {
+            $q->where('user_id_fk', 'LIKE', '%' . $search . '%')
+              ->orWhere('amount', 'LIKE', '%' . $search . '%')
+              ->orWhere('txn_id', 'LIKE', '%' . $search . '%')
+              ->orWhere('wdate', 'LIKE', '%' . $search . '%');
+        });
     }
+
+    // 📅 Date Filter (From → To)
+    if (!empty($from_date) && !empty($to_date)) {
+        $notes = $notes->whereBetween('created_at', [$from_date, $to_date]);
+    } elseif (!empty($from_date)) {
+        $notes = $notes->whereDate('created_at', '>=', $from_date);
+    } elseif (!empty($to_date)) {
+        $notes = $notes->whereDate('created_at', '<=', $to_date);
+    }
+
+    $notes = $notes->paginate($limit)->appends([
+        'limit' => $limit,
+        'search' => $search,
+        'from_date' => $from_date,
+        'to_date' => $to_date,
+    ]);
+
+    $this->data['withdraw_list'] = $notes;
+    $this->data['search'] = $search;
+    $this->data['from_date'] = $from_date;
+    $this->data['to_date'] = $to_date;
+    $this->data['page'] = 'admin.withdraw.approved-withdraw';
+    return $this->admin_dashboard();
+}
 
 
   public function pendingBankWithdrawal(Request $request)
