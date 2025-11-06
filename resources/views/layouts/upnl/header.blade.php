@@ -36,7 +36,7 @@
                 <div class="div-block">
                     <div class="div-block-2">
                         <a href="{{route('user.dashboard')}}" class="brand">
-                            <img class="logo" src="{{asset('')}}assets/logo.png" alt>
+                            <img class="logo" src="{{asset('')}}assets/logo-white.png" alt>
                         </a>
                         <nav role="navigation" class="nav-menu">
                             <a href="{{route('user.dashboard')}}"
@@ -264,7 +264,7 @@
         }
         .offcanvas{
             position:fixed; inset:0 0 0 auto; width:min(480px, 92vw); height:100vh;
-            background:#fff; box-shadow:-10px 0 30px rgba(16,24,40,.2); transform:translateX(100%);
+            background:#161616; box-shadow:-10px 0 30px rgba(16,24,40,.2); transform:translateX(100%);
             transition:transform .35s ease; z-index:100; display:flex; flex-direction:column;
         }
         .offcanvas.open{transform:translateX(0)}
@@ -521,7 +521,7 @@
             padding: 20px;
             border-radius: 16px;
             background-color: var(--background);
-            border: 1px solid #e0e1e2;
+            border:1px solid #4e4e4e;
             text-align: center;
             transition: all 0.3s ease;
             background: linear-gradient(252deg, #4d4d4d 0%, #353434 21%, #313131 39%, #3c3c3c 100%);
@@ -541,13 +541,13 @@
         .balance-item .currency-name {
             font-weight: 600;
             font-size: 18px;
-            color: #9d7bff;
+            color: #ffffff;
         }
         
         .balance-item .currency-amount {
             font-family: 'Inter', sans-serif;
             font-size: 16px;
-            color: var(--text-muted);
+            color: #9d7bff;
         }
 
         /* ===================================================================
@@ -663,7 +663,7 @@
         .referral-stats .value {
             font-size: 20px;
             font-weight: 600;
-            color: var(--dark-slate-grey);
+            color: #dcdcdc;
         }
 
         .transactions-list {
@@ -874,7 +874,7 @@
     display: flex; align-items: center; gap: 12px;
     padding: 14px 16px; border-radius: 14px;
     text-decoration: none; font-weight: 700;
-    border: 1px solid rgba(48,54,59,.12); background: #fff; color: #30363b;
+    border: 1px solid rgba(48,54,59,.12); background: #3d4348; color: #ffffff;
   }
   .mobile-menu-item a:active { transform: translateY(1px); }
   .mobile-menu .menu-icon {
@@ -896,7 +896,7 @@
         <aside class="offcanvas" id="offcanvas" aria-hidden="true">
             <div class="off-top">
                 <a href="{{route('user.dashboard')}}" class="off-brand brand">
-                    <img class="logo" src="{{asset('')}}assets/logo.png" alt>
+                    <img class="logo" src="{{asset('')}}assets/logo-white.png" alt>
                 </a>
                 <button class="off-close" id="offClose" aria-label="Close menu">
                     <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"

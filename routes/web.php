@@ -118,6 +118,8 @@ Route::any('/SubmitBuyFund', [App\Http\Controllers\UserPanel\AddFund::class, 'Su
 
 // invest
 Route::get('/invest', [App\Http\Controllers\UserPanel\Invest::class, 'index'])->name('user.invest');
+Route::post('/quote', [App\Http\Controllers\UserPanel\Invest::class, 'quoteCryptapi'])->name('user.quote');
+
 Route::get('/re-invest', [App\Http\Controllers\UserPanel\Invest::class, 'index1'])->name('user.re-invest');
 Route::get('/compounding', [App\Http\Controllers\UserPanel\Invest::class, 'compounding'])->name('user.compounding');
 Route::post('/compounding-deposit', [App\Http\Controllers\UserPanel\Invest::class, 'compound'])->name('compounding.deposit');
