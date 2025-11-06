@@ -238,7 +238,7 @@ $activetotalTeam=$toatll->where('active_status','Active')->count();
          $username = $tuser;
         }
 
-         $check=User::where('username',$username)->count();;
+         $check=User::where('username',$username)->count();
           if($check>0)
           {
              $username = $username;  
@@ -252,7 +252,7 @@ $activetotalTeam=$toatll->where('active_status','Active')->count();
     $pool='users';
     $user_id=User::where('username',$username)->first();
     $user_id=@$user_id->id;
-    $mydata =User::where('id',$user_id)->first(); 
+    $mydata =User::where('id',$user_id)->first();
     if ($user_id!="")
     {
     $childs_1 =   $this->find_users(@$user_id,'Left');  
