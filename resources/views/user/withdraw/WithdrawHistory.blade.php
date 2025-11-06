@@ -532,7 +532,6 @@ background: linear-gradient(252deg, #0c0c0c 0%, #353434 21%, #2f2e2e 39%, #1a1a1
       <form id="liveSearchForm" class="ops-search-bar">
         <input type="text" id="searchInput" name="search" placeholder="Search ..." class="search-input">
       </form>
-
     </div>
 
     <div class="history-table-wrapper">
@@ -561,7 +560,7 @@ background: linear-gradient(252deg, #0c0c0c 0%, #353434 21%, #2f2e2e 39%, #1a1a1
               @elseif($deposit->status == 'Approved')
               <span style="color:green;">Approved</span>
               @else
-              <span style="color:red;">Declined</span>
+              <span style="color:red;">Inactive</span>
               @endif
             </td>
           </tr>

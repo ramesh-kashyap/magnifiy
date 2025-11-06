@@ -47,7 +47,7 @@
     }
 
     .section-card {
-            background: #2c2c2c;
+        background: #2c2c2c;
         border-radius: var(--border-radius);
         padding: 30px;
         box-shadow: 0 10px 40px rgba(48, 54, 59, 0.05);
@@ -91,8 +91,8 @@
         width: 100%;
         padding: 15px 20px;
         border-radius: 14px;
-        border: 2px solid #3d4348;
-        background-color: #30363b;
+        border: 1px solid #545454;
+        background-color: #2c2c2c;
         color: #a2a5ad;
         font-size: 16px;
         font-family: 'Inter', sans-serif;
@@ -393,6 +393,105 @@
         background: #fff;
         color: var(--dark-slate-grey);
     }
+
+    .modal-overlay {
+        position: fixed;
+        inset: 0;
+        background: rgba(11, 15, 26, 0.8);
+        backdrop-filter: blur(10px);
+        z-index: 999;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity 0.3s ease;
+    }
+
+    .modal-overlay.visible {
+        opacity: 1;
+        pointer-events: auto;
+    }
+
+    .modal-content {
+        /* Применяем стиль темной карточки */
+        background-color: var(--card-dark-bg);
+        color: var(--text-light);
+        padding: 30px;
+        border-radius: var(--border-radius);
+        width: 90%;
+        max-width: 500px;
+        border: 1px solid var(--dark-grey-lighter);
+        transform: scale(0.95);
+        transition: transform 0.3s ease;
+    }
+
+    .modal-overlay.visible .modal-content {
+        transform: scale(1);
+    }
+
+    .modal-content h3 {
+        color: #fff;
+        font-size: 24px;
+        margin-bottom: 10px;
+    }
+
+    .modal-content p {
+        color: var(--text-muted);
+        margin-bottom: 25px;
+        font-size: 16px;
+    }
+
+    .modal-content p strong {
+        color: var(--sandy-brown);
+        font-weight: 600;
+    }
+
+    /* Используем твой класс .input-group для отступов */
+    .modal-content .input-group {
+        gap: 10px;
+    }
+
+    .modal-buttons {
+        margin-top: 30px;
+        display: flex;
+        justify-content: flex-end;
+        gap: 15px;
+    }
+
+    /* Кнопка "Отмена" */
+    .btn-cancel {
+        background-color: #30363b;
+        color: #fff;
+        padding: 18px;
+        text-align: center;
+        border-radius: 14px;
+        font-family: 'Bowler', sans-serif;
+        font-size: 18px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        border: none;
+        width: 100%;
+    }
+
+    .btn-ca {
+        background-color: #914ef0ff;
+        color: #fff;
+        padding: 18px;
+        text-align: center;
+        border-radius: 14px;
+        font-family: 'Bowler', sans-serif;
+        font-size: 18px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        border: none;
+        width: 100%;
+    }
+
+    .btn-cancel:hover {
+        background-color: #454c52;
+        color: #fff;
+    }
 </style>
 
 <main class="settings-wrapper">
@@ -434,10 +533,18 @@
                             class="input-field" placeholder="Enter your email"
                             required>
                     </div>
-
+                    <div class="input-group">
+                        <label for="">Country
+                        </label>
+                        <input type="text"
+                            id="" value="{{$profile_data->country}}"
+                            name="country"
+                            class="input-field" placeholder="Enter your country"
+                            required>
+                    </div>
                     <div class="card-footer">
                         <button type="submit" name="save_password"
-                            value="1" class="btn-primary">Update
+                            value="1" class="btn-primary"style="font-family: Anta;">Update
                         </button>
                     </div>
                 </form>
@@ -446,202 +553,205 @@
 
             <section class="section-card">
                 <h3>Payment Details</h3>
-                <form action="/handlers/user/save-wallets.php"
-                    method="post">
-                    <input type="hidden" name="csrf"
-                        value="901a7f730969f8c29b5e1d9657bf2775">
-                    <input type="hidden" name="from"
-                        value="/user/settings/">
-                    <div
-                        class="wallet-list">
-                        <!-- <div class="wallet-item">
-                              <img
-                                  src="{{asset('')}}assets/icons/bitcoin.png"
-                                  alt="BitCoin_BTC" class="wallet-icon">
-                              <div class="wallet-input-group">
-                                  <label for="wallet-bitcoin_btc"
-                                      class="wallet-label">Bitcoin,
-                                      BTC</label>
-                                  <input type="text"
-                                      id="wallet-bitcoin_btc"
-                                      name="BitCoin_BTC" value
-                                      class="input-field"
-                                      placeholder="Your Wallet Address">
-                              </div>
-                          </div>
-                          <div class="wallet-item">
-                              <img
-                                  src="{{asset('')}}assets/icons/litecoin.png"
-                                  alt="LiteCoin_LTC" class="wallet-icon">
-                              <div class="wallet-input-group">
-                                  <label for="wallet-litecoin_ltc"
-                                      class="wallet-label">Litecoin,
-                                      Ltc</label>
-                                  <input type="text"
-                                      id="wallet-litecoin_ltc"
-                                      name="LiteCoin_LTC" value
-                                      class="input-field"
-                                      placeholder="Your Wallet Address">
-                              </div>
-                          </div>
-                          <div class="wallet-item">
-                              <img
-                                  src="{{asset('')}}assets/icons/dogecoin.png"
-                                  alt="DogeCoin_DOGE" class="wallet-icon">
-                              <div class="wallet-input-group">
-                                  <label for="wallet-dogecoin_doge"
-                                      class="wallet-label">Dogecoin,
-                                      Doge</label>
-                                  <input type="text"
-                                      id="wallet-dogecoin_doge"
-                                      name="DogeCoin_DOGE" value
-                                      class="input-field"
-                                      placeholder="Your Wallet Address">
-                              </div>
-                          </div>
-                          <div class="wallet-item">
-                              <img
-                                  src="{{asset('')}}assets/icons/ethereum.png"
-                                  alt="Ethereum_ETH" class="wallet-icon">
-                              <div class="wallet-input-group">
-                                  <label for="wallet-ethereum_eth"
-                                      class="wallet-label">Ethereum,
-                                      Eth</label>
-                                  <input type="text"
-                                      id="wallet-ethereum_eth"
-                                      name="Ethereum_ETH" value
-                                      class="input-field"
-                                      placeholder="Your Wallet Address">
-                              </div>
-                          </div>
-                          <div class="wallet-item">
-                              <img
-                                  src="{{asset('')}}assets/icons/ripple.png"
-                                  alt="Ripple_XRP" class="wallet-icon">
-                              <div class="wallet-input-group">
-                                  <label for="wallet-ripple_xrp"
-                                      class="wallet-label">Ripple,
-                                      XRP</label>
-                                  <input type="text"
-                                      id="wallet-ripple_xrp"
-                                      name="Ripple_XRP" value
-                                      class="input-field"
-                                      placeholder="Your Wallet Address">
-                              </div>
-                          </div>
-                          <div class="wallet-item">
-                              <img
-                                  src="{{asset('')}}assets/icons/ripple.png"
-                                  alt="ripple_tag" class="wallet-icon">
-                              <div class="wallet-input-group">
-                                  <label for="wallet-ripple_tag"
-                                      class="wallet-label">Ripple
-                                      Tag</label>
-                                  <input type="text"
-                                      id="wallet-ripple_tag"
-                                      name="ripple_tag" value
-                                      class="input-field"
-                                      placeholder="Your Wallet Address">
-                              </div>
-                          </div>
-                          <div class="wallet-item">
-                              <img
-                                  src="{{asset('')}}assets/icons/usdt_trc20.png"
-                                  alt="TRON_TRX" class="wallet-icon">
-                              <div class="wallet-input-group">
-                                  <label for="wallet-tron_trx"
-                                      class="wallet-label">Tron,
-                                      TRX</label>
-                                  <input type="text" id="wallet-tron_trx"
-                                      name="TRON_TRX" value
-                                      class="input-field"
-                                      placeholder="Your Wallet Address">
-                              </div>
-                          </div> -->
+                <form id="wallet-form" action="{{route('user.wallet_change')}}" method="post">
+                    @csrf
+                    <div class="wallet-list">
                         <div class="wallet-item">
-                            <img
-                                src="{{asset('')}}assets/icons/binancecoin.png"
-                                alt="BinanceCoin_BNB"
-                                class="wallet-icon">
+                            <img src="{{asset('')}}assets/icons/usdt_trc20.png" alt="USDT_TRC20_USDT" class="wallet-icon">
                             <div class="wallet-input-group">
-                                <label for="wallet-binancecoin_bnb"
-                                    class="wallet-label">BINANCECOIN,
-                                    BNB</label>
-                                <input type="text"
-                                    id="wallet-binancecoin_bnb"
-                                    name="BinanceCoin_BNB" value
-                                    class="input-field"
-                                    placeholder="Your Wallet Address">
+                                <label class="wallet-label">USDT_TRC20, USDT</label>
+                                <input type="text" id="wallet-usdt_trc20_usdt" name="usdtTrc20" value="" class="input-field" required placeholder="Your Wallet Address">
                             </div>
                         </div>
+
                         <div class="wallet-item">
-                            <img
-                                src="{{asset('')}}assets/icons/usdt_trc20.png"
-                                alt="USDT_TRC20_USDT"
-                                class="wallet-icon">
+                            <img src="{{asset('')}}assets/icons/usdt_bep20.png" alt="USDT_BEP20_USDT" class="wallet-icon">
                             <div class="wallet-input-group">
-                                <label for="wallet-usdt_trc20_usdt"
-                                    class="wallet-label">USDT_TRC20,
-                                    USDT</label>
-                                <input type="text"
-                                    id="wallet-usdt_trc20_usdt"
-                                    name="USDT_TRC20_USDT" value
-                                    class="input-field"
-                                    placeholder="Your Wallet Address">
+                                <label class="wallet-label">USDT_BEP20, USDT</label>
+                                <input type="text" id="wallet-usdt_bep20_usdt" name="usdtBep20" value="" required class="input-field" placeholder="Your Wallet Address">
                             </div>
                         </div>
-                        <!-- <div class="wallet-item">
-                              <img
-                                  src="{{asset('')}}assets/icons/usdt_bep20.png"
-                                  alt="USDT_BEP20_USDT"
-                                  class="wallet-icon">
-                              <div class="wallet-input-group">
-                                  <label for="wallet-usdt_bep20_usdt"
-                                      class="wallet-label">USDT_BEP20,
-                                      USDT</label>
-                                  <input type="text"
-                                      id="wallet-usdt_bep20_usdt"
-                                      name="USDT_BEP20_USDT" value
-                                      class="input-field"
-                                      placeholder="Your Wallet Address">
-                              </div>
-                          </div>
-                          <div class="wallet-item">
-                              <img
-                                  src="{{asset('')}}assets/icons/usdt_ton.png"
-                                  alt="USDT_TON_USDT" class="wallet-icon">
-                              <div class="wallet-input-group">
-                                  <label for="wallet-usdt_ton_usdt"
-                                      class="wallet-label">USDT_TON,
-                                      USDT</label>
-                                  <input type="text"
-                                      id="wallet-usdt_ton_usdt"
-                                      name="USDT_TON_USDT" value
-                                      class="input-field"
-                                      placeholder="Your Wallet Address">
-                              </div>
-                          </div>
-                          <div class="wallet-item">
-                              <img
-                                  src="{{asset('')}}assets/icons/ton.png"
-                                  alt="TON_TON" class="wallet-icon">
-                              <div class="wallet-input-group">
-                                  <label for="wallet-ton_ton"
-                                      class="wallet-label">Ton,
-                                      Ton</label>
-                                  <input type="text" id="wallet-ton_ton"
-                                      name="TON_TON" value
-                                      class="input-field"
-                                      placeholder="Your Wallet Address">
-                              </div>
-                          </div> -->
                     </div>
+
                     <div class="card-footer">
-                        <button type="submit" class="btn-primary">Save
-                            Wallets</button>
+                        <input type="hidden" id="userEmail" value="{{ Auth::user()->email }}">
+                        <button type="button" id="send-otp-btn" class="btn-primary"style="font-family: Anta;">Confirm</button>
+                        <div id="otp-status" style="margin-top: 10px;margin-right: 10px; color: green; font-weight: bold; display: none;">
+                            ✅ Verified!
+                        </div>
+                        <button type="submit" id="save-wallet-btn" class="btn-primary" style="display:none;font-family: Anta;">Save Wallets</button>
                     </div>
                 </form>
+
+                <!-- OTP Modal -->
+                <div id="wallet-modal" class="modal-overlay">
+                    <div class="modal-content">
+                        <form id="otp-verify-form" action="{{route('user.verify-otp')}}" method="POST">
+                            @csrf
+
+                            <h3>Verify OTP</h3>
+                            <p>Please enter the OTP sent to your registered email.</p>
+                            <div class="input-group">
+                                <label for="otp-input" class="input-group-label">Verification Code</label>
+                                <input type="hidden" id="userEmail" value="{{ Auth::user()->email }}">
+
+                                <input id="otp-input" class="input-field" name="code" type="text" placeholder="Enter verification code" required>
+                            </div>
+                            <div class="modal-buttons">
+                                <button type="button" id="modal-close-btn" class="btn-cancel"style="font-family: Anta;">Cancel</button>
+                                <button type="submit" class="btn-ca"style="font-family: Anta;">Verify</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
             </section>
+      
+            <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+            <script>
+                const modal = document.getElementById('wallet-modal');
+                const closeBtn = document.getElementById('modal-close-btn');
+                const sendOtpBtn = document.getElementById('send-otp-btn');
+                const saveWalletBtn = document.getElementById('save-wallet-btn');
+                const otpStatus = $('#otp-status');
+                const otpForm = document.getElementById('otp-verify-form');
+                const otpInput = document.getElementById('otp-input');
+
+                sendOtpBtn.addEventListener('click', function() {
+                    const email = document.getElementById('userEmail').value;
+
+                    // console.log("Sending OTP to:", email); // Debugging
+
+                    $.ajax({
+                        url: "{{ route('user.send-otp') }}",
+                        method: "POST",
+                        data: {
+                            _token: "{{ csrf_token() }}",
+                            email: email
+                        },
+                        beforeSend: function() {
+                            sendOtpBtn.textContent = "Sending...";
+                            sendOtpBtn.disabled = true;
+                        },
+                        success: function(response) {
+
+                            // alert(response.message || "OTP has been sent to your registered email.");
+                            modal.classList.add('visible');
+                        },
+                        error: function(xhr) {
+                            console.error("Error sending OTP:", xhr.responseText);
+                            alert("Failed to send OTP. Check console for details.");
+                        },
+                        complete: function() {
+                            sendOtpBtn.textContent = "Send OTP";
+                            sendOtpBtn.disabled = false;
+                        }
+                    });
+                });
+
+                closeBtn.addEventListener('click', function() {
+                    modal.classList.remove('visible');
+                });
+
+                window.addEventListener('click', function(e) {
+                    if (e.target === modal) {
+                        modal.classList.remove('visible');
+                    }
+                });
+
+                otpForm.addEventListener('submit', function(e) {
+                    e.preventDefault();
+                    const code = otpInput.value.trim();
+                    const email = document.getElementById('userEmail').value;
+
+                    if (!code) {
+                        alert("Please enter OTP!");
+                        return;
+                    }
+
+                    // console.log("Verifying OTP:", code); // Debugging
+
+                    $.ajax({
+                        url: "{{ route('user.verify-otp') }}",
+                        method: "POST",
+                        data: {
+                            _token: "{{ csrf_token() }}",
+                            email: email,
+                            code: code
+                        },
+                        success: function(response) {
+
+                            // console.log("OTP verify response:", response);
+
+                            if (response.status === 'success') {
+                                otpStatus.show();
+                                alert("✅ OTP Verified Successfully!");
+                                modal.classList.remove('visible');
+
+                                
+                                sendOtpBtn.style.display = 'none';
+                                saveWalletBtn.style.display = 'inline-block';
+                            } else {
+                                alert("❌ Invalid OTP, please try again.");
+                            }
+                        },
+                        error: function(xhr) {
+                            console.error("Error verifying OTP:", xhr.responseText);
+                            alert("Error verifying OTP.");
+                        }
+                    });
+                });
+            </script>
+
+
+
+            <!-- <script>
+                const modal = document.getElementById('wallet-modal');
+                const closeBtn = document.getElementById('modal-close-btn');
+                const sendOtpBtn = document.getElementById('send-otp-btn');
+                const saveWalletBtn = document.getElementById('save-wallet-btn');
+                const otpForm = document.getElementById('otp-verify-form');
+
+                // 🟢 Open modal on Send OTP
+                sendOtpBtn.addEventListener('click', function() {
+                    // Yahan backend call karo OTP bhejne ke liye (AJAX optional)
+                    alert("OTP has been sent to your registered email.");
+                    modal.classList.add('visible');
+                });
+
+                // 🟢 Close modal
+                closeBtn.addEventListener('click', function() {
+                    modal.classList.remove('visible');
+                });
+
+                // 🟢 Click outside to close
+                window.addEventListener('click', function(e) {
+                    if (e.target === modal) {
+                        modal.classList.remove('visible');
+                    }
+                });
+
+                // 🟢 OTP Verify Form Submit
+                otpForm.addEventListener('submit', function(e) {
+                    e.preventDefault();
+
+                    const code = document.getElementById('otp-input').value.trim();
+                    if (!code) {
+                        alert("Please enter OTP!");
+                        return;
+                    }
+
+                    // Simulate OTP verification success
+                    // TODO: Replace this with real backend call for verification
+                    alert("OTP Verified Successfully!");
+                    modal.classList.remove('visible');
+
+                    // Hide Send OTP button, show Save Wallet button
+                    sendOtpBtn.style.display = 'none';
+                    saveWalletBtn.style.display = 'inline-block';
+                });
+            </script> -->
         </div>
 
         <div class="sidebar">
@@ -657,21 +767,21 @@
                             <label for="field-old_password">Old
                                 Password</label>
                             <input type="password" id="field-old_password"
-                                name="old_password" class="input-field"
+                                name="old_password" class="input-field" style="background-color: #3d4348;"
                                 placeholder="Enter old password" required>
                         </div>
                         <div class="input-group">
                             <label for="field-new_password">New
                                 Password</label>
                             <input type="password" id="field-new_password"
-                                name="password" class="input-field"
+                                name="password" class="input-field" style="background-color: #3d4348;"
                                 placeholder="Enter new password" required>
                         </div>
                         <div class="input-group">
                             <label for="field-repeat_new_password">Repeat
                                 the New Password</label>
                             <input type="password"
-                                id="field-repeat_new_password"
+                                id="field-repeat_new_password" style="background-color: #3d4348;"
                                 name="password_confirmation"
                                 class="input-field" placeholder="Enter confirm password"
                                 required>
@@ -679,7 +789,7 @@
 
                         <div class="card-footer">
                             <button type="submit" name="save_password"
-                                value="1" class="btn-primary">Password Update
+                                value="1" class="btn-primary"style="font-family: Anta;">Password Update
                             </button>
                         </div>
                     </form>
