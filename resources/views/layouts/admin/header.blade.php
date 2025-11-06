@@ -255,6 +255,11 @@ table#example {
                         <i class="flaticon-072-printer"></i>
                         <span class="nav-text">User Activation </span>
                     </a>
+                </li> 
+                  <li><a href="{{route('admin.power-activation')}}" class="ai-icon" aria-expanded="false">
+                        <i class="flaticon-072-printer"></i>
+                        <span class="nav-text">Power Activation </span>
+                    </a>
                 </li>  
                 <!--    <li><a class="has-arrow ai-icon" href="javascript:void()" aria-expanded="false">-->
                 <!--        <i class="flaticon-043-menu"></i>-->

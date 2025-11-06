@@ -316,6 +316,13 @@ public function add_bonus_post(Request $request)
      return $this->admin_dashboard();
 
     }
+      public function power_activation()
+    {
+     
+     $this->data['page'] = 'admin.users.power_activate';
+     return $this->admin_dashboard();
+
+    }
 
 
     public function activate_admin_post(Request $request)

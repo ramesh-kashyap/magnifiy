@@ -73,6 +73,8 @@ class DepositController extends Controller
         $limit = $request->limit ? $request->limit : paginationLimit();
         $status = $request->status ? $request->status : null;
         $search = $request->search ? $request->search : null;
+        $from_date = $request->from_date;
+         $to_date = $request->to_date;
         $notes = Investment::where('status','Active')->orderBy('id', 'DESC');
 
         if($search <> null && $request->reset!="Reset"){
@@ -85,13 +87,27 @@ class DepositController extends Controller
             });
 
           }
+           if (!empty($from_date) && !empty($to_date)) {
+        $notes = $notes->whereBetween('created_at', [$from_date, $to_date]);
+    } elseif (!empty($from_date)) {
+        $notes = $notes->whereDate('created_at', '>=', $from_date);
+    } elseif (!empty($to_date)) {
+        $notes = $notes->whereDate('created_at', '<=', $to_date);
+    }
+
     $notes = $notes->paginate($limit)
         ->appends([
-            'limit' => $limit
+            'limit' => $limit,
+            'search' => $search,
+
+             'from_date' => $from_date,
+        'to_date' => $to_date,
         ]);
 
         $this->data['deposit_list'] =  $notes;
-        $this->data['search'] = $search;
+  $this->data['search'] = $search;
+    $this->data['from_date'] = $from_date;
+    $this->data['to_date'] = $to_date;
         $this->data['page'] = 'admin.deposit.deposit-list';
         return $this->admin_dashboard();
     }
