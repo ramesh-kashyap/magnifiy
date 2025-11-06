@@ -1,14 +1,21 @@
 <?php
 
 namespace App\Http\Controllers\UserPanel;  // ✅ सबसे पहले namespace
+namespace App\Http\Controllers\UserPanel;  // ✅ सबसे पहले namespace
 
+use App\Http\Controllers\Controller;       // ✅ namespace के नीचे सभी use statements
 use App\Http\Controllers\Controller;       // ✅ namespace के नीचे सभी use statements
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;       // ✅ Http यहाँ होना चाहिए
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Http;       // ✅ Http यहाँ होना चाहिए
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 use App\Models\User;
 use App\Models\Investment;
+use App\Models\Plan;
+
 use App\Models\Plan;
 
 use App\Models\Compound;
@@ -20,9 +27,6 @@ use Redirect;
 use Hash;
 use Helper;
 use DB;
-use SimpleSoftwareIO\QrCode\Facades\QrCode; // composer require simplesoftwareio/simple-qrcode
-
-
 class Invest extends Controller
 {
 
@@ -31,8 +35,13 @@ class Invest extends Controller
 
 
 
+
+
+
     public function index()
     {
+
+
 
 
      $userInfo = auth()->user(); // Get authenticated user
@@ -52,6 +61,7 @@ class Invest extends Controller
             'convert'       => 0,
         ];
 
+     
      
 
         $response = Http::get($url, $queryParams);
@@ -81,8 +91,17 @@ class Invest extends Controller
 
 
 
+
+
+
+
+
+
   public function index1()
     {
+     $userInfo = auth()->user(); 
+
+
      $userInfo = auth()->user(); 
 
 
@@ -91,13 +110,57 @@ class Invest extends Controller
         $this->data['page'] = 'user.invest.re-invest';
 
         return $this->dashboard_layout(); 
+        return $this->dashboard_layout(); 
     }  
 
 
 
 
  public function planpost(Request $request)
+
+
+ public function planpost(Request $request)
     {
+        $request->validate([
+            'amount' => 'required|numeric',
+            'payment_type' => 'required|string',
+        ]);
+
+        $amount = $request->amount;
+        $paymentType = $request->payment_type;
+
+        // Redirect with session data (safer than query string)
+        return redirect()
+            ->route('user.plan')
+            ->with([
+                'amount' => $amount,
+                'payment_type' => $paymentType
+            ]);
+    }
+
+    public function plan(Request $request)
+    {
+        $user = auth()->user();
+
+        // Get old deposit list
+        $notes = Plan::where('user_id', $user->id)
+                    ->orderBy('id', 'desc')
+                    ->get();
+
+        // Get from session (after redirect)
+        $amount = session('amount');
+        $paymentType = session('payment_type');
+
+        // Fallback: also allow query params
+        if (!$amount) {
+            $amount = $request->query('amount');
+        }
+        if (!$paymentType) {
+            $paymentType = $request->query('payment_type');
+        }
+
+        $qrCode = null;
+        $address = null;
         $request->validate([
             'amount' => 'required|numeric',
             'payment_type' => 'required|string',
@@ -157,6 +220,53 @@ class Invest extends Controller
                     'multi_chain'   => 0,
                     'convert'       => 0,
                 ];
+        // ✅ Only call API if both values exist
+        if ($amount && $paymentType) {
+            try {
+                $refId = $user->username;
+                $url = 'https://api.cryptapi.io/bep20/usdt/create/';
+
+                $queryParams = [
+                    'callback'      => 'https://helixfund.live/dynamicUpiCallback?refid=' . $refId,
+                    'address'       => '0x3D297d99cCC6C872F6770978c5C1E794Da79f735',
+                    'pending'       => 0,
+                    'confirmations' => 1,
+                    'email'         => 'string',
+                    'post'          => 0,
+                    'priority'      => 'default',
+                    'multi_token'   => 0,
+                    'multi_chain'   => 0,
+                    'convert'       => 0,
+                ];
+
+                $response = Http::get($url, $queryParams);
+
+                if ($response->successful()) {
+                    $data = $response->json();
+                    Log::info('CryptAPI Response:', $data);
+
+                    $qrCode = $data['qrcode_url'] ?? null;
+                    $address = $data['address_in'] ?? null;
+                } else {
+                    Log::error('CryptAPI failed', ['status' => $response->status()]);
+                }
+
+            } catch (\Exception $e) {
+                Log::error('CryptAPI Error: ' . $e->getMessage());
+            }
+        }
+
+        // ✅ Pass all data to view
+        $this->data['deposit_list'] = $notes;
+        $this->data['amount'] = $amount;
+        $this->data['payment_type'] = $paymentType;
+        $this->data['qr_code'] = $qrCode;
+        $this->data['address'] = $address;
+        $this->data['page'] = 'user.invest.plan';
+
+        return $this->dashboard_layout();
+
+    }  
 
                 $response = Http::get($url, $queryParams);
 
