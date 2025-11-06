@@ -92,7 +92,7 @@ Route::get('/wallets', [App\Http\Controllers\UserPanel\Profile::class, 'wallets'
 
 Route::post('/update-profile', [App\Http\Controllers\UserPanel\Profile::class, 'profile_update'])->name('user.update-profile');
 Route::post('/update-wallet', [App\Http\Controllers\UserPanel\Profile::class, 'wallet_update'])->name('user.update-wallet');
-Route::post('/wallet_change', [App\Http\Controllers\UserPanel\Profile::class, 'wallet_change'])->name('user.wallet_change');
+Route::any('/wallet_change', [App\Http\Controllers\UserPanel\Profile::class, 'wallet_change'])->name('user.wallet_change');
 
 Route::get('/ChangePass', [App\Http\Controllers\UserPanel\Profile::class, 'change_password'])->name('user.ChangePass');
 Route::get('/security-password', [App\Http\Controllers\UserPanel\Profile::class, 'ChangeSecurityPass'])->name('user.security-password');
@@ -100,6 +100,8 @@ Route::get('/share', [App\Http\Controllers\UserPanel\Profile::class, 'share'])->
 Route::get('/security', [App\Http\Controllers\UserPanel\Profile::class, 'security'])->name('user.security');
 Route::get('/referrals', [App\Http\Controllers\UserPanel\Profile::class, 'referrals'])->name('user.referrals');
 Route::post('/send-otp', [App\Http\Controllers\UserPanel\Profile::class, 'sendOtp'])->name('user.send-otp');
+Route::post('/verify-otp', [App\Http\Controllers\UserPanel\Profile::class, 'verifyOtp'])->name('user.verify-otp');
+
 Route::post('/update-password', [App\Http\Controllers\UserPanel\Profile::class, 'updatePassword'])->name('user.update-password');
 
 Route::post('/edit-password', [App\Http\Controllers\UserPanel\Profile::class, 'editPassword'])->name('user.edit-password');

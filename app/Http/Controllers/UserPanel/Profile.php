@@ -21,6 +21,7 @@ class Profile extends Controller
     public function index()
     {
     $user=Auth::user();
+
     $profile_data = User::where('id',$user->id)->orderBy('id','desc')->first();
     $this->data['login_logs'] =UserLogin::where('user_id',$user->id)->orderBy('id','DESC')->limit(10)->get();
     $this->data['profile_data'] =$profile_data;
@@ -125,7 +126,7 @@ public function BankDetail()
             $validation =  Validator::make($request->all(), [
                 'email' => 'required|string',
                 'name' => 'required|string',
-                // 'country' => 'required|string',
+                'country' => 'required|string',
                 // 'city' => 'required',
                 // 'zipCode' => 'required',
                 // 'usdtBep20' => 'required',
@@ -148,7 +149,7 @@ public function BankDetail()
           $update_data['email']=$post_array['email'];
         //   $update_data['phone']=$post_array['phone'];
         //   $update_data['telegram']=$post_array['telegram'];
-        //   $update_data['country']=$post_array['country'];
+          $update_data['country']=$post_array['country'];
         //   $update_data['zipCode']=$post_array['zipCode'];
         //   $update_data['city']=$post_array['city'];
         //   $update_data['lastname']=$post_array['lastname'];
@@ -223,43 +224,78 @@ public function BankDetail()
         }
     }
 
-      public function wallet_change(Request $request)
-    {
-        try{
+    //   public function wallet_change(Request $request)
+    // {
+    //     try{
      
-            $user=Auth::user();
-            $id=Auth::user()->id;
+    //         $user=Auth::user();
+    //         $id=Auth::user()->id;
 
 
-            $request->validate(['code' => 'required']);
-            $code = $request->code;
+    //         $request->validate(['code' => 'required']);
+    //         $code = $request->code;
      
-        if (PasswordReset::where('token', $code)->where('email', $user->email)->count() != 1) {
-            $notify[] = ['error', 'Invalid token'];
-            return redirect()->route('user.codeVerify')->withNotify($notify);
-        }
+    //     if (PasswordReset::where('token', $code)->where('email', $user->email)->count() != 1) {
+    //         $notify[] = ['error', 'Invalid token'];
+    //         return redirect()->route('user.codeVerify')->withNotify($notify);
+    //     }
         
      
-         $usdtTrc20 = session()->get('usdtTrc20');
-         $usdtBep20 = session()->get('usdtBep20');
+    //      $usdtTrc20 = session()->get('usdtTrc20');
+    //      $usdtBep20 = session()->get('usdtBep20');
             
-           $user->usdtTrc20=$usdtTrc20;
-           $user->usdtBep20=$usdtBep20;
-           $user->save();
-           $notify[] = ['success', 'Your Wallet change Successfully.'];
+    //        $user->usdtTrc20=$usdtTrc20;
+    //        $user->usdtBep20=$usdtBep20;
+    //        $user->save();
+    //        $notify[] = ['success', 'Your Wallet change Successfully.'];
            
-        return redirect()->route('user.wallets')->withNotify($notify);
+    //     return redirect()->route('user.wallets')->withNotify($notify);
             
 
-          }
-           catch(\Exception $e){
-            Log::info('error here');
-            Log::info($e->getMessage());
-            print_r($e->getMessage());
+    //       }
+    //        catch(\Exception $e){
+    //         Log::info('error here');
+    //         Log::info($e->getMessage());
+    //         print_r($e->getMessage());
        
-            return back()->withErrors('error', $e->getMessage())->withInput();
+    //         return back()->withErrors('error', $e->getMessage())->withInput();
+    //     }
+    // }
+public function wallet_change(Request $request)
+{
+    try {
+        $user = Auth::user();
+
+        $usdtTrc20 = $request->input('usdtTrc20');
+        $usdtBep20 = $request->input('usdtBep20');
+
+        if (
+            ($usdtTrc20 && $user->usdtTrc20 == $usdtTrc20) ||
+            ($usdtBep20 && $user->usdtBep20 == $usdtBep20)
+        ) {
+          
+            $notify[] = ['error', 'This wallet address already exists.'];
+            return redirect()->back()->withNotify($notify);
         }
+
+        if (!empty($usdtTrc20)) {
+            $user->usdtTrc20 = $usdtTrc20;
+        }
+
+        if (!empty($usdtBep20)) {
+            $user->usdtBep20 = $usdtBep20;
+        }
+
+        $user->update();
+
+        $notify[] = ['success', 'Wallet address added or updated successfully.'];
+        return redirect()->back()->withNotify($notify);
+
+    } catch (\Exception $e) {
+        Log::error('Wallet change error: ' . $e->getMessage());
+        return back()->withErrors(['error' => $e->getMessage()])->withInput();
     }
+}
 
 
 public function sendOtp(Request $request)
@@ -290,6 +326,38 @@ public function sendOtp(Request $request)
         'otp' => $otp // optional: sirf testing ke liye
     ]);
 }
+ public function verifyOtp(Request $request)
+    {
+        try {
+            $email = $request->email;
+            $code = $request->code;
+
+            if (!$email || !$code) {
+                return response()->json(['status' => 'error', 'message' => 'Email and OTP are required.'], 400);
+            }
+
+            $record = DB::table('password_resets')
+                ->where('email', $email)
+                ->where('token', $code)
+                ->first();
+
+            if (!$record) {
+                return response()->json(['status' => 'error', 'message' => 'Invalid or expired OTP.']);
+            }
+
+            // OTP verified successfully — delete record
+            DB::table('password_resets')->where('email', $email)->delete();
+
+            return response()->json(['status' => 'success', 'message' => 'OTP verified successfully.']);
+        } catch (\Exception $e) {
+            \Log::error('Verify OTP Error: ' . $e->getMessage());
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Something went wrong while verifying OTP.',
+                'error' => $e->getMessage(),
+            ], 500);
+        }
+    }
 
 public function editPassword(Request $request)
 {
