@@ -593,8 +593,6 @@ public function dynamicUpiCallback(Request $request)
         $queryData = $request->query();
         Log::info('Incoming callback data: ' . json_encode($queryData));
 
-        // Save raw JSON
-        // Activitie::create(['data' => json_encode($queryData)]);
 
         $validAddresses = [
             "0x3D297d99cCC6C872F6770978c5C1E794Da79f735",
@@ -645,14 +643,13 @@ public function dynamicUpiCallback(Request $request)
                 User::where('id',$user->id)->update($user_update); 
                }
               
-                 add_direct_income($users->id,$amount,0);  
 
                 
                 // Insert investment
-                Investment::insert([
+                Plan::insert([
                     'plan' => 1,
                     'orderId' => $invoice,
-                    'transaction_id' => $txnId,
+                    // 'transaction_id' => $txnId,
                     'user_id' => $user->id,
                     'user_id_fk' => $user->username,
                     'amount' => $amount,

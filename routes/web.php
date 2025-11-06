@@ -118,6 +118,14 @@ Route::any('/SubmitBuyFund', [App\Http\Controllers\UserPanel\AddFund::class, 'Su
 
 // invest
 Route::get('/invest', [App\Http\Controllers\UserPanel\Invest::class, 'index'])->name('user.invest');
+Route::get('/plan', [App\Http\Controllers\UserPanel\Invest::class, 'plan'])->name('user.plan');
+Route::post('/planpost', [App\Http\Controllers\UserPanel\Invest::class, 'planpost'])->name('user.planpost');
+Route::get('/confirm', [App\Http\Controllers\UserPanel\Invest::class, 'confirm'])->name('user.confirm');
+Route::get('/botreport', [App\Http\Controllers\UserPanel\Invest::class, 'planhistory'])->name('user.botreport');
+
+
+
+
 Route::get('/re-invest', [App\Http\Controllers\UserPanel\Invest::class, 'index1'])->name('user.re-invest');
 Route::get('/compounding', [App\Http\Controllers\UserPanel\Invest::class, 'compounding'])->name('user.compounding');
 Route::post('/compounding-deposit', [App\Http\Controllers\UserPanel\Invest::class, 'compound'])->name('compounding.deposit');
