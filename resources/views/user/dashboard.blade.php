@@ -10,7 +10,9 @@
         width: 100%;
         min-width: 600px;
         border-collapse: collapse;
+            color: #f1f1f1;
     }
+
 
     .history-table th,
     .history-table td {
@@ -28,7 +30,7 @@
     }
 
     .history-table tbody tr:hover {
-        background-color: var(--background);
+        /* background-color: var(--background); */
     }
 
     .history-table .plan-name {
@@ -163,92 +165,50 @@
                 </div>
                 <div class="balances-grid">
                     <div class="balance-item">
-                        <img src="{{asset('')}}assets/icons/bitcoin.png"
+                        <img src="{{asset('')}}assets/icons8-increase-64.png"
                             alt="BitCoin"
                             onerror="this.onerror=null;this.src='/img/coin-default.svg';">
-                        <div class="currency-name">BitCoin</div>
-                        <div class="currency-amount">0.00000000
-                            BTC</div>
+                        <div class="currency-name">TRADING INCOME</div>
+                        <div class="currency-amount">$0.00</div>
                     </div>
                     <div class="balance-item">
-                        <img src="{{asset('')}}assets/icons/litecoin.png"
+                        <img src="{{asset('')}}assets/icons8-microsoft-teams-2025-100.png"
                             alt="LiteCoin"
                             onerror="this.onerror=null;this.src='/img/coin-default.svg';">
-                        <div class="currency-name">LiteCoin</div>
-                        <div class="currency-amount">0.00000000
-                            LTC</div>
+                        <div class="currency-name">LEVEL INCOME</div>
+                        <div class="currency-amount">$0.00</div>
                     </div>
                     <div class="balance-item">
-                        <img src="{{asset('')}}assets/icons/dogecoin.png"
+                        <img src="{{asset('')}}assets/icons8-hierarchy-100.png"
                             alt="DogeCoin"
                             onerror="this.onerror=null;this.src='/img/coin-default.svg';">
-                        <div class="currency-name">DogeCoin</div>
-                        <div class="currency-amount">0.00000000
-                            DOGE</div>
+                        <div class="currency-name">BINARY INCOME</div>
+                        <div class="currency-amount">$0.00</div>
                     </div>
                     <div class="balance-item">
-                        <img src="{{asset('')}}assets/icons/ethereum.png"
+                        <img src="{{asset('')}}assets/icons8-organization-chart-people-100.png"
                             alt="Ethereum"
                             onerror="this.onerror=null;this.src='/img/coin-default.svg';">
-                        <div class="currency-name">Ethereum</div>
-                        <div class="currency-amount">0.00000000
-                            ETH</div>
+                        <div class="currency-name">GENERATION INCOME</div>
+                        <div class="currency-amount">$0.00</div>
                     </div>
                     <div class="balance-item">
-                        <img src="{{asset('')}}assets/icons/ripple.png" alt="Ripple"
+                        <img src="{{asset('')}}assets/icons8-income-100.png" alt="Ripple"
                             onerror="this.onerror=null;this.src='/img/coin-default.svg';">
-                        <div class="currency-name">Ripple</div>
-                        <div class="currency-amount">0.000000 XRP</div>
+                        <div class="currency-name">MATCHING INCOME</div>
+                        <div class="currency-amount">$0.00</div>
                     </div>
                     <div class="balance-item">
-                        <img src="{{asset('')}}assets/icons/tron.png" alt="TRON"
+                        <img src="{{asset('')}}assets/icons8-euro-money-80.png" alt="TRON"
                             onerror="this.onerror=null;this.src='/img/coin-default.svg';">
-                        <div class="currency-name">TRON</div>
-                        <div class="currency-amount">0.000000 TRX</div>
+                        <div class="currency-name">ROYALTY INCOME</div>
+                        <div class="currency-amount">$0.00</div>
                     </div>
-                    <div class="balance-item">
-                        <img src="{{asset('')}}assets/icons/binancecoin.png"
-                            alt="BinanceCoin"
-                            onerror="this.onerror=null;this.src='/img/coin-default.svg';">
-                        <div class="currency-name">BinanceCoin</div>
-                        <div class="currency-amount">0.00000000
-                            BNB</div>
-                    </div>
-                    <div class="balance-item">
-                        <img src="{{asset('')}}assets/icons/usdt_trc20.png"
-                            alt="USDT_TRC20"
-                            onerror="this.onerror=null;this.src='/img/coin-default.svg';">
-                        <div class="currency-name">USDT_TRC20</div>
-                        <div class="currency-amount">0.00000000
-                            USDT</div>
-                    </div>
-                    <div class="balance-item">
-                        <img src="{{asset('')}}assets/icons/usdt_bep20.png"
-                            alt="USDT_BEP20"
-                            onerror="this.onerror=null;this.src='/img/coin-default.svg';">
-                        <div class="currency-name">USDT_BEP20</div>
-                        <div class="currency-amount">0.00000000
-                            USDT</div>
-                    </div>
-                    <div class="balance-item">
-                        <img src="{{asset('')}}assets/icons/usdt_ton.png"
-                            alt="USDT_TON"
-                            onerror="this.onerror=null;this.src='/img/coin-default.svg';">
-                        <div class="currency-name">USDT_TON</div>
-                        <div class="currency-amount">0.00000000
-                            USDT</div>
-                    </div>
-                    <div class="balance-item">
-                        <img src="{{asset('')}}assets/icons/ton.png" alt="TON"
-                            onerror="this.onerror=null;this.src='/img/coin-default.svg';">
-                        <div class="currency-name">TON</div>
-                        <div class="currency-amount">0.00000000
-                            TON</div>
-                    </div>
+                 
                 </div>
             </section>
 
-            {{-- <section class="dashboard-card">
+            <section class="dashboard-card">
                 <div class="card-header">
                     <h3>Active &amp; Closed Deposits</h3>
                     <a href="/user/invest">Investment History</a>
@@ -299,7 +259,7 @@
                         </tbody>
                     </table>
                 </div>
-            </section> --}}
+            </section> 
 
 
         </div>
@@ -339,7 +299,7 @@
                 <ul class="transactions-list" style="list-style:none; margin:0; padding:0;">
                     @forelse($latestInvestments as $investment)
                     <li class="transaction-item"
-                        style="display:flex; align-items:center; justify-content:space-between; border:1px solid #e0e1e2; border-radius:10px; padding:10px 14px; margin-bottom:10px; background:#272626;">
+                        style="display:flex; align-items:center; justify-content:space-between; border:1px solid #424445; border-radius:10px; padding:10px 14px; margin-bottom:10px; background:#272626;">
 
                         <!-- Left side -->
                         <div class="left" style="display:flex; flex-direction:column;">

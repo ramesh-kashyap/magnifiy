@@ -20,6 +20,8 @@ use Redirect;
 use Hash;
 use Helper;
 use DB;
+use SimpleSoftwareIO\QrCode\Facades\QrCode; // composer require simplesoftwareio/simple-qrcode
+
 
 class Invest extends Controller
 {
@@ -182,64 +184,8 @@ class Invest extends Controller
         $this->data['page'] = 'user.invest.plan';
 
         return $this->dashboard_layout();
-    }
 
- 
-
- 
-
-
-
-public function confirm(Request $request)
-{
-    $user = auth()->user();
-    $amount = $request->query('amount');
-    $paymentType = $request->query('payment_type');
-
-    if (!$amount || !$paymentType) {
-        return redirect()->route('user.plan')->with('error', 'Please select a plan first.');
-    }
-
-    // --- API Call Here ---
-    $refId = $user->username;
-    $url = 'https://api.cryptapi.io/bep20/usdt/create/';
-
-    $queryParams = [
-        'callback'      => 'https://helixfund.live/dynamicUpiCallback?refid=' . $refId,
-        'address'       => '0x3D297d99cCC6C872F6770978c5C1E794Da79f735',
-        'pending'       => 0,
-        'confirmations' => 1,
-        'email'         => 'string',
-        'post'          => 0,
-        'priority'      => 'default',
-        'multi_token'   => 0,
-        'multi_chain'   => 0,
-        'convert'       => 0,
-    ];
-
-    $response = Http::get($url, $queryParams);
-    $data = $response->json();
-
-    $this->data['amount'] = $amount;
-    $this->data['payment_type'] = $paymentType;
-    $this->data['qr_code'] = $data['qrcode_url'] ?? null;
-    $this->data['address'] = $data['address_in'] ?? null;
-    $this->data['page'] = 'user.invest.confirm';
-
-    return $this->dashboard_layout();
-}
-
-
-
-
-
-
-
-
-
-
-
-
+    }  
 
 
     public function compounding(Request $request)
@@ -701,7 +647,7 @@ public function cancel_payment($id)
     public function fundActivation(Request $request)
     {
 
-      // dd("hiii");
+      dd($request->all());
   try{
     $validation =  Validator::make($request->all(), [
         'amount' => 'required|numeric|min:50',
