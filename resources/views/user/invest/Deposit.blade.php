@@ -919,7 +919,10 @@
     setLoading(investBtn, true);
 
     try {
-      const res = await fetch(`{{ route('user.quote') }}`, {
+      const res = await fetch(`{{ route('user.quote') }}`,
+      
+      
+       {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
