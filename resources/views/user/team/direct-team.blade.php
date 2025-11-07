@@ -426,7 +426,7 @@
     </section>
  
  
-    <section class="section-card">
+    <!-- <section class="section-card">
         <h3>Standard Commission Rates</h3>
         <div class="levels-grid">
             <div class="level-card">
@@ -473,7 +473,7 @@
  
             </table>
         </div>
-    </section>
+    </section> -->
  
 </main>
  
