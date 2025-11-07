@@ -43,6 +43,10 @@
                                 class="nav-link  active">Dashboard</a>
                             <a href="{{route('user.invest')}}" class="nav-link  ">
                                 Deposit</a>
+
+                                 <a href="{{route('user.plan')}}" class="nav-link">
+                                Bot Plan</a>
+
                             <a href="{{route('user.Withdraw')}}"
                                 class="nav-link  ">Withdraw</a>
                             <a href="{{route('user.re-invest')}}"
@@ -222,7 +226,7 @@
         .div-block-2 { display:flex; align-items:center; gap:100px; }
         .brand { display: flex; align-items: center; font-family: Anta, sans-serif; font-size: 24px; font-weight: 700; color: var(--dark-slate-grey); }
         .logo-icon { width: 36px; height: 36px; border-radius: 12px; background: var(--dark-slate-grey); display: grid; place-items: center; color: var(--sandy-brown); font-weight: 800; margin-right: 10px; }
-        .nav-menu { display: flex; align-items: center; gap: 44px; transition:opacity .3s ease, transform .4s ease; }
+        .nav-menu { display: flex; align-items: center; gap: 40px; transition:opacity .3s ease, transform .4s ease; }
         .nav-link { color: var(--text-muted); font-weight: 500; transition: color 0.3s ease; }
         .nav-link:hover, .nav-link.active { color: #9d7bff; }
         
@@ -940,6 +944,19 @@
                             <span class="menu-title">Deposit</span>
                         </a></li><li class="mobile-menu-item"><a
                             href="{{route('user.Withdraw')}}">
+
+                            <svg class="menu-icon" viewBox="0 0 24 24"
+                                fill="none" stroke="currentColor"
+                                stroke-width="1.8" stroke-linecap="round"
+                                stroke-linejoin="round" aria-hidden="true">
+                                <path
+                                    d="M12 21V7m0 0l4 4m-4-4l-4 4M4 5h16"></path>
+                            </svg>
+
+
+                                <span class="menu-title">Bot Plan</span>
+                        </a></li><li class="mobile-menu-item"><a
+                            href="{{route('user.plan')}}">
 
                             <svg class="menu-icon" viewBox="0 0 24 24"
                                 fill="none" stroke="currentColor"
