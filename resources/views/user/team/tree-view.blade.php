@@ -7,7 +7,7 @@
     position: relative;
     width: 100%;
     height: 20px;
-    margin: 10px auto;
+    margin: 15px auto;
 }
 
 /* Vertical line above children (centered under parent) */
@@ -15,7 +15,7 @@
     content: "";
     position: absolute;
     left: 50%;
-    top: -20px;
+    top: -14px;
     width: 2px;
     height: 20px;
     transform: translateX(-50%);
@@ -32,7 +32,7 @@
 .tree-border::after {
     content: "";
     position: absolute;
-    top: 0;
+    top: 7;
     left: 25%;
     width: 50%;
     height: 2px;
@@ -181,7 +181,7 @@ input[type="image"]:hover {
 .user-wrapper::before {
     content: "";
     position: absolute;
-    top: -30px;
+    top: -29px;
     left: 50%;
     width: 2px;
     height: 20px;
@@ -256,8 +256,8 @@ input[type="image"]:hover {
 }
 
 
-
 </style>
+
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 
 
@@ -274,10 +274,10 @@ input[type="image"]:hover {
             <a class="" href="{{route('user.right-team')}}">Right Team</a>
             <a class="active" href="{{route('user.tree-view')}}">Genealogy Tree</a>
             <!-- <a class="" href="?type=referrals">Referrals</a>  -->
+             
         </div>
-    </section>
 
-    <div class="historyPage">
+        <div class="historyPage">
 
         <div class="tablePartners">
             <div class="table-responsive form-white-curved table-main-wrap">
@@ -287,7 +287,7 @@ input[type="image"]:hover {
 
                         <tbody>
                             <tr class="text-center">
-  <td colspan="8" style="background-color: #151515; border: none; padding: 25px;">
+  <td colspan="8" style="background-color: #1c1c1c; border: none; padding: 25px;">
     <div style="color: #f1f1f1; font-weight: 600; margin-bottom: 12px; font-size: 1.1rem;">
      Downline Search
     </div>
@@ -350,7 +350,7 @@ input[type="image"]:hover {
                                 </td>
                             </tr>
                             <tr class="text-center">
-                                <td colspan="8" style="border-color:#f7f7f9; background-color:#151515;"
+                                <td colspan="8" style="border-color:#f7f7f9; background-color:#1c1c1c;"
                                     class="text-center">
                                     <div class="tree-border"></div>
                                 </td>
@@ -373,7 +373,7 @@ input[type="image"]:hover {
 
                             ?>
                             <tr class="text-center">
-                                <td colspan="4" style="border-color:#f7f7f9; background-color:#151515;"
+                                <td colspan="4" style="border-color:#f7f7f9; background-color:#1c1c1c;"
                                     class="text-center"><a
                                         href="{{route('user.tree-view')}}?user_id={{@$childs_1->username}}">
                           <div class="user-wrapper" style="position: relative; display: inline-block;">
@@ -396,11 +396,19 @@ input[type="image"]:hover {
 
                                         <?= @$childs_1->username ? strtoupper(@$childs_1->username) : "" ?>
                                     </span>
+                                            @if(!empty($childs_1) && !empty($childs_1->username))
+
                                      <div class="user-popup">
         <p><strong>Name:</strong> {{ @$childs_1->name ?? 'N/A' }}</p>
         <p><strong>Username:</strong> {{ @$childs_1->username ?? 'N/A' }}</p>
+           <p><strong>Package:</strong> $ {{ @$childs_1->package ?? '0.00' }}</p>
+         <p><strong>Sponsor Id:</strong> {{ @$childs_1->sponsor_username ?? 'N/A' }}</p>
+
+         <p><strong>Join Date:</strong> {{ @$childs_1->created_at ?? '—' }}</p>
        
     </div>
+     @endif
+
 </div>
                                 </td>
                                 <?php
@@ -419,7 +427,7 @@ input[type="image"]:hover {
                                     $color = "empty";
                                 }
                                 ?>
-                                <td colspan="4" style="border-color:#f7f7f9; background-color:#151515;"
+                                <td colspan="4" style="border-color:#f7f7f9; background-color:#1c1c1c;"
                                     class="text-center"><a
                                         href="{{route('user.tree-view')}}?user_id={{@$childs_2->username}}">
                                     <div class="user-wrapper" style="position: relative; display: inline-block;">
@@ -443,20 +451,28 @@ input[type="image"]:hover {
                                     <span id="ctl00_ContentPlaceHolder1_Label9">
                                         <?= @$childs_2->username ? strtoupper(@$childs_2->username) : "" ?>
                                     </span>
+                              @if(!empty($childs_2) && !empty($childs_2->username))
+
                                     <div class="user-popup">
         <p><strong>Name:</strong> {{ @$childs_2->name ?? 'N/A' }}</p>
         <p><strong>Username:</strong> {{ @$childs_2->username ?? 'N/A' }}</p>
+         <p><strong>Package:</strong> $ {{ @$childs_2->package ?? '0.00' }}</p>
+         <p><strong>Join Date:</strong> {{ @$childs_2->created_at ?? '—' }}</p>
+                  <p><strong>Sponsor Id:</strong> {{ @$childs_2->sponsor_username  ?? '—' }}</p>
+
        
     </div>
-</div>
+         @endif
+
+</div> 
                                 </td>
                             </tr>
                             <tr class="text-center">
-                                <td colspan="4" style="border-color:#f7f7f9; background-color:#151515;"
+                                <td colspan="4" style="border-color:#f7f7f9; background-color:#1c1c1c;"
                                     class="text-center">
                                     <div class="tree-border"></div>
                                 </td>
-                                <td colspan="4" style="border-color:#f7f7f9; background-color:#151515;"
+                                <td colspan="4" style="border-color:#f7f7f9; background-color:#1c1c1c;"
                                     class="text-center">
                                     <div class="tree-border"></div>
                                 </td>
@@ -479,7 +495,7 @@ input[type="image"]:hover {
                             }
                             ?>
                             <tr class="text-center">
-                                <td colspan="2" style="border-color:#f7f7f9; background-color:#151515;"
+                                <td colspan="2" style="border-color:#f7f7f9; background-color:#1c1c1c;"
                                     class="text-center"><a
                                         href="{{route('user.tree-view')}}?user_id={{@$childs_3->username}}">
                                            <div class="user-wrapper" style="position: relative; display: inline-block;">
@@ -501,11 +517,19 @@ input[type="image"]:hover {
                                     <span id="ctl00_ContentPlaceHolder1_Label10">
                                         <?= @$childs_3->username ? strtoupper(@$childs_3->username) : "" ?>
                                     </span>
+                              @if(!empty($childs_3) && !empty($childs_3->username))
+
                                     <div class="user-popup">
         <p><strong>Name:</strong> {{ @$childs_3->name ?? 'N/A' }}</p>
         <p><strong>Username:</strong> {{ @$childs_3->username ?? 'N/A' }}</p>
+         <p><strong>Package:</strong> $ {{ @$childs_3->package ?? '0.00' }}</p>
+         <p><strong>Join Date:</strong> {{ @$childs_3->created_at ?? '—' }}</p>
+       <p><strong>Sponsor Id:</strong> {{ @$childs_3->sponsor_username  ?? '—' }}</p>
+
        
     </div>
+             @endif
+
 </div>
                                 </td>
                                 <?php
@@ -525,7 +549,7 @@ input[type="image"]:hover {
                                     $color = "empty";
                                 }
                                 ?>
-                                <td colspan="2" style="border-color:#f7f7f9; background-color:#151515;"
+                                <td colspan="2" style="border-color:#f7f7f9; background-color:#1c1c1c;"
                                     class="text-center"><a
                                         href="{{route('user.tree-view')}}?user_id={{@$childs_4->username}}">
                                            <div class="user-wrapper" style="position: relative; display: inline-block;">
@@ -548,12 +572,19 @@ input[type="image"]:hover {
                                     </span><br>
                                     <span id="ctl00_ContentPlaceHolder1_Label11">
                                         <?= @$childs_4->username ? strtoupper(@$childs_4->username) : "" ?>
-                                    </span>
-                                                               <div class="user-popup">
+                                    </span>  
+                                    @if(!empty($childs_4) && !empty($childs_4->username))
+                                    <div class="user-popup">
         <p><strong>Name:</strong> {{ @$childs_4->name ?? 'N/A' }}</p>
         <p><strong>Username:</strong> {{ @$childs_4->username ?? 'N/A' }}</p>
+          <p><strong>Package:</strong>$ {{ @$childs_4->package ?? '0.00' }}</p>
+         <p><strong>Join Date:</strong> {{ @$childs_4->created_at ?? '—' }}</p>
+                <p><strong>Sponsor Id:</strong> {{ @$childs_4->sponsor_username  ?? '—' }}</p>
+
        
     </div>
+         @endif
+
 </div>
                                 </td>
                                 <?php
@@ -573,7 +604,7 @@ input[type="image"]:hover {
                                     $color = "empty";
                                 }
                                 ?>
-                                <td colspan="2" style="border-color:#f7f7f9; background-color:#151515;"
+                                <td colspan="2" style="border-color:#f7f7f9; background-color:#1c1c1c;"
                                     class="text-center"><a
                                         href="{{route('user.tree-view')}}?user_id={{@$childs_5->username}}">
                                     <div class="user-wrapper" style="position: relative; display: inline-block;">
@@ -597,11 +628,18 @@ input[type="image"]:hover {
                                     <span id="ctl00_ContentPlaceHolder1_Label12">
                                         <?= @$childs_5->username ? strtoupper(@$childs_5->username) : "" ?>
                                     </span>
-                                                               <div class="user-popup">
+                              @if(!empty($childs_5) && !empty($childs_5->username))
+                                    <div class="user-popup">
         <p><strong>Name:</strong> {{ @$childs_5->name ?? 'N/A' }}</p>
         <p><strong>Username:</strong> {{ @$childs_5->username ?? 'N/A' }}</p>
+           <p><strong>Package:</strong> $ {{ @$childs_5->package ?? '0.00' }}</p>
+         <p><strong>Join Date:</strong> {{ @$childs_5->created_at ?? '—' }}</p>
+          <p><strong>Sponsor Id:</strong> {{ @$childs_5->sponsor_username  ?? '—' }}</p>
+
         
     </div>
+             @endif
+
 </div>
                                 </td>
                                 <?php
@@ -620,7 +658,7 @@ input[type="image"]:hover {
                                     $color = "empty";
                                 }
                                 ?>
-                                <td colspan="2" style="border-color:#f7f7f9; background-color:#151515;"
+                                <td colspan="2" style="border-color:#f7f7f9; background-color:#1c1c1c;"
                                     class="text-center"><a
                                         href="{{route('user.tree-view')}}?user_id={{@$childs_6->username}}">
                              <div class="user-wrapper" style="position: relative; display: inline-block;">
@@ -643,11 +681,19 @@ input[type="image"]:hover {
                                     <span id="ctl00_ContentPlaceHolder1_Label13">
                                         <?= @$childs_6->username ? strtoupper(@$childs_6->username) : "" ?>
                                     </span>
-                                                                                                   <div class="user-popup">
+                  @if(!empty($childs_6) && !empty($childs_6->username))
+
+            <div class="user-popup">
         <p><strong>Name:</strong> {{ @$childs_6->name ?? 'N/A' }}</p>
         <p><strong>Username:</strong> {{ @$childs_6->username ?? 'N/A' }}</p>
+         <p><strong>Package:</strong>$ {{ @$childs_6->package ?? '0.00' }}</p>
+         <p><strong>Join Date:</strong> {{ @$childs_6->created_at ?? '—' }}</p>
+          <p><strong>Sponsor Id:</strong> {{ @$childs_6->sponsor_username  ?? '—' }}</p>
+
        
     </div>
+ @endif
+
 </div>
                                 </td>
                             </tr>
@@ -667,6 +713,9 @@ input[type="image"]:hover {
         </div>
 
     </div>
+    </section>
+
+    
 </main>
 
 
