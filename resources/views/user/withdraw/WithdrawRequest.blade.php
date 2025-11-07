@@ -710,7 +710,7 @@
                  wallet address to receive funds.</p>
          </div>
 
-         <form method="post" id="payment-form" action="{{route('user.Withdraw-Request')}}">
+         <form method="post" id="" action="{{route('user.Withdraw-Request')}}">
              @csrf
 
 
@@ -775,25 +775,25 @@
                                 border-radius: 8px;
                             ">
                              <table class="withdraw-table"
-                                 style="width:100%; border-collapse: collapse; margin-top: 10px; min-width: 500px;">
+                                 style="width:100%; border-collapse: collapse; margin-top: 20px; min-width: 500px;">
                                  <thead>
-                                     <tr style="text-align:left; background:#111; color:#fff;">
-                                         <th style="padding:10px;">Sr.no</th>
-                                         <th style="padding:10px;">Amount</th>
-                                         <th style="padding:10px;">Status</th>
-                                         <th style="padding:10px;">Date</th>
+                                     <tr style="text-align:left;  color:#fff;">
+                                         <th style="padding:8px;">Sr.no</th>
+                                         <th style="padding:8px;">Amount</th>
+                                         <th style="padding:8px;">Status</th>
+                                         <th style="padding:8px;">Date</th>
                                      </tr>
                                  </thead>
                                  <tbody>
                                      @foreach($withdrawals as $key => $withdraw)
                                      <tr style="border-bottom:1px solid #323232ff; color:gray;">
-                                         <td style="padding:10px;">{{ $key + 1 }}</td>
-                                         <td style="padding:10px;">₹{{ number_format($withdraw->amount, 2) }}</td>
-                                         <td style="padding:10px; color:
+                                         <td style="padding:8px;">{{ $key + 1 }}</td>
+                                         <td style="padding:8px;">₹{{ number_format($withdraw->amount, 2) }}</td>
+                                         <td style="padding:8px; color:
                             {{ $withdraw->status == 'completed' ? 'green' : ($withdraw->status == 'pending' ? 'orange' : 'red') }}">
                                              {{ ucfirst($withdraw->status) }}
                                          </td>
-                                         <td style="padding:10px;">{{ $withdraw->created_at->format('d M Y') }}</td>
+                                         <td style="padding:8px;">{{ $withdraw->created_at->format('d M Y') }}</td>
                                      </tr>
                                      @endforeach
                                  </tbody>
@@ -823,7 +823,7 @@
                                  </div>
                                  <small
                                      style="color: var(--text-muted); font-size: 12px;">Available:
-                                     <span id="available-balance">{{ Auth::user()->available_balance() }}
+                                     <span id="">{{ Auth::user()->available_balance() }}
 
                                          USDT</span></small>
                              </div>

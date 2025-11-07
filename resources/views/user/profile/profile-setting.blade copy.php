@@ -544,15 +544,15 @@
                     </div>
                     <div class="card-footer">
                         <button type="submit" name="save_password"
-                            value="1" class="btn-primary" style="font-family: Anta;">Update
+                            value="1" class="btn-primary"style="font-family: Anta;">Update
                         </button>
                     </div>
                 </form>
             </section>
+            @include('partials.notify')
 
             <section class="section-card">
                 <h3>Payment Details</h3>
-
                 <form id="wallet-form" action="{{route('user.wallet_change')}}" method="post">
                     @csrf
                     <div class="wallet-list">
@@ -560,7 +560,7 @@
                             <img src="{{asset('')}}assets/icons/usdt_trc20.png" alt="USDT_TRC20_USDT" class="wallet-icon">
                             <div class="wallet-input-group">
                                 <label class="wallet-label">USDT_TRC20, USDT</label>
-                                <input type="text" id="wallet-usdt_trc20_usdt" name="usdtTrc20" value="{{$profile_data->usdtTrc20}}" class="input-field" required placeholder="Your Wallet Address">
+                                <input type="text" id="wallet-usdt_trc20_usdt" name="usdtTrc20" value="" class="input-field" required placeholder="Your Wallet Address">
                             </div>
                         </div>
 
@@ -568,118 +568,141 @@
                             <img src="{{asset('')}}assets/icons/usdt_bep20.png" alt="USDT_BEP20_USDT" class="wallet-icon">
                             <div class="wallet-input-group">
                                 <label class="wallet-label">USDT_BEP20, USDT</label>
-                                <input type="text" id="wallet-usdt_bep20_usdt" name="usdtBep20" value="{{$profile_data->usdtBep20}}" required class="input-field" placeholder="Your Wallet Address">
+                                <input type="text" id="wallet-usdt_bep20_usdt" name="usdtBep20" value="" required class="input-field" placeholder="Your Wallet Address">
                             </div>
                         </div>
                     </div>
 
                     <div class="card-footer">
-                        <input type="hidden" id="userEmail" required value="{{ Auth::user()->email }}">
-
-                        <!-- OTP Modal -->
-                        <div id="wallet-modal" class="modal-overlay">
-                            <div class="modal-content">
-                                <h3>Verify OTP</h3>
-                                <p>Please enter the OTP sent to your registered email.</p>
-                                <div class="input-group">
-                                    <label for="otp-input" class="input-group-label">Verification Code</label>
-                                    <input id="otp-input" class="input-field" name="code" type="text" placeholder="Enter verification code" required>
-                                </div>
-                                <div class="modal-buttons">
-                                    <button type="button" id="modal-close-btn" class="btn-cancel" style="font-family: Anta;">Cancel</button>
-                                    <button type="button" id="verify-otp-btn" class="btn-ca" style="font-family: Anta;">Submit</button>
-                                </div>
-                            </div>
+                        <input type="hidden" id="userEmail" value="{{ Auth::user()->email }}">
+                        <button type="button" id="send-otp-btn" class="btn-primary"style="font-family: Anta;">Confirm</button>
+                        <div id="otp-status" style="margin-top: 10px;margin-right: 10px; color: green; font-weight: bold; display: none;">
+                            ✅ Verified!
                         </div>
-
-                        <button type="button" id="send-otp-btn" class="btn-primary" style="font-family: Anta;">Confirm</button>
-                        <!-- <div id="otp-status" style="margin-top:10px;margin-right:10px;color:green;font-weight:bold;display:none;">
-            ✅ Verified!
-        </div> -->
                         <button type="submit" id="save-wallet-btn" class="btn-primary" style="display:none;font-family: Anta;">Save Wallets</button>
                     </div>
                 </form>
+
+                <!-- OTP Modal -->
+                <div id="wallet-modal" class="modal-overlay">
+                    <div class="modal-content">
+                        <form id="otp-verify-form" action="{{route('user.verify-otp')}}" method="POST">
+                            @csrf
+
+                            <h3>Verify OTP</h3>
+                            <p>Please enter the OTP sent to your registered email.</p>
+                            <div class="input-group">
+                                <label for="otp-input" class="input-group-label">Verification Code</label>
+                                <input type="hidden" id="userEmail" value="{{ Auth::user()->email }}">
+
+                                <input id="otp-input" class="input-field" name="code" type="text" placeholder="Enter verification code" required>
+                            </div>
+                            <div class="modal-buttons">
+                                <button type="button" id="modal-close-btn" class="btn-cancel"style="font-family: Anta;">Cancel</button>
+                                <button type="submit" class="btn-ca"style="font-family: Anta;">Verify</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
             </section>
-            <!-- ✅ Minimal Modal CSS -->
-
-
+      
             <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
             <script>
-                $(document).ready(function() {
+                const modal = document.getElementById('wallet-modal');
+                const closeBtn = document.getElementById('modal-close-btn');
+                const sendOtpBtn = document.getElementById('send-otp-btn');
+                const saveWalletBtn = document.getElementById('save-wallet-btn');
+                const otpStatus = $('#otp-status');
+                const otpForm = document.getElementById('otp-verify-form');
+                const otpInput = document.getElementById('otp-input');
 
-                    const modal = $('#wallet-modal');
-                    const sendOtpBtn = $('#send-otp-btn');
-                    const saveWalletBtn = $('#save-wallet-btn');
-                    const otpStatus = $('#otp-status');
-                    const otpInput = $('#otp-input');
-                    const userEmail = $('#userEmail').val();
+                sendOtpBtn.addEventListener('click', function() {
+                    const email = document.getElementById('userEmail').value;
 
-                    sendOtpBtn.on('click', function() {
+                    // console.log("Sending OTP to:", email); // Debugging
 
-                        $.ajax({
-                            url: "{{ route('user.send-otp') }}",
-                            method: "POST",
-                            data: {
-                                _token: "{{ csrf_token() }}",
-                                email: userEmail
-                            },
-                            beforeSend: function() {
-                                sendOtpBtn.text('Sending...');
-                                sendOtpBtn.prop('disabled', true);
-                            },
-                            success: function(response) {
-                                notify('success', '✅ OTP Sent Successfully:');
-                                modal.addClass('visible'); // ✅ show modal properly
-                            },
-                            error: function(xhr) {
-                                // console.error("❌ Error sending OTP:", xhr.responseText);
-                            notify('warning', 'Failed to send OTP. Please check console for details.');
+                    $.ajax({
+                        url: "{{ route('user.send-otp') }}",
+                        method: "POST",
+                        data: {
+                            _token: "{{ csrf_token() }}",
+                            email: email
+                        },
+                        beforeSend: function() {
+                            sendOtpBtn.textContent = "Sending...";
+                            sendOtpBtn.disabled = true;
+                        },
+                        success: function(response) {
 
-                            },
-                            complete: function() {
-                                sendOtpBtn.text('Confirm');
-                                sendOtpBtn.prop('disabled', false);
-                            }
-                        });
-                    });
-
-                    // ✅ Step 2: Close modal manually
-                    $('#modal-close-btn').on('click', function() {
-                        // console.log("❎ User closed OTP modal.");
-                        modal.removeClass('visible');
-                    });
-
-                    // ✅ Step 3: Verify OTP (only hide popup and unlock Save Wallet)
-                    $('#verify-otp-btn').on('click', function() {
-                        const code = otpInput.val().trim();
-                        // console.log("🔢 OTP entered:", code);
-
-                        if (!code) {
-                            notify('warning', '⚠️ Please enter the OTP!');
-                            return;
+                            // alert(response.message || "OTP has been sent to your registered email.");
+                            modal.classList.add('visible');
+                        },
+                        error: function(xhr) {
+                            console.error("Error sending OTP:", xhr.responseText);
+                            alert("Failed to send OTP. Check console for details.");
+                        },
+                        complete: function() {
+                            sendOtpBtn.textContent = "Send OTP";
+                            sendOtpBtn.disabled = false;
                         }
-
-                        // console.log("✅ OTP entered, hiding popup...");
-                        modal.removeClass('visible'); // ✅ hide modal on verify
-
-                        otpStatus.show();
-                        sendOtpBtn.hide();
-                        saveWalletBtn.show();
-
-                        // console.log("🎯 OTP Verified (Frontend). Save Wallets button now visible.");
                     });
+                });
 
-                    // Optional: clicking outside modal closes it
-                    $(window).on('click', function(e) {
-                        if ($(e.target).is(modal)) {
-                            // console.log("🖱️ Clicked outside modal, closing it.");
-                            modal.removeClass('visible');
+                closeBtn.addEventListener('click', function() {
+                    modal.classList.remove('visible');
+                });
+
+                window.addEventListener('click', function(e) {
+                    if (e.target === modal) {
+                        modal.classList.remove('visible');
+                    }
+                });
+
+                otpForm.addEventListener('submit', function(e) {
+                    e.preventDefault();
+                    const code = otpInput.value.trim();
+                    const email = document.getElementById('userEmail').value;
+
+                    if (!code) {
+                        alert("Please enter OTP!");
+                        return;
+                    }
+
+                    // console.log("Verifying OTP:", code); // Debugging
+
+                    $.ajax({
+                        url: "{{ route('user.verify-otp') }}",
+                        method: "POST",
+                        data: {
+                            _token: "{{ csrf_token() }}",
+                            email: email,
+                            code: code
+                        },
+                        success: function(response) {
+
+                            // console.log("OTP verify response:", response);
+
+                            if (response.status === 'success') {
+                                otpStatus.show();
+                                alert("✅ OTP Verified Successfully!");
+                                modal.classList.remove('visible');
+
+                                
+                                sendOtpBtn.style.display = 'none';
+                                saveWalletBtn.style.display = 'inline-block';
+                            } else {
+                                alert("❌ Invalid OTP, please try again.");
+                            }
+                        },
+                        error: function(xhr) {
+                            console.error("Error verifying OTP:", xhr.responseText);
+                            alert("Error verifying OTP.");
                         }
                     });
                 });
             </script>
-
 
 
 
@@ -766,7 +789,7 @@
 
                         <div class="card-footer">
                             <button type="submit" name="save_password"
-                                value="1" class="btn-primary" style="font-family: Anta;">Password Update
+                                value="1" class="btn-primary"style="font-family: Anta;">Password Update
                             </button>
                         </div>
                     </form>
@@ -777,6 +800,5 @@
     </div>
 </main>
 </body>
-@include('partials.notify')
 
 </html>

@@ -261,34 +261,107 @@ public function BankDetail()
     //         return back()->withErrors('error', $e->getMessage())->withInput();
     //     }
     // }
+// public function wallet_change(Request $request)
+// {
+//     try {
+//         $user = Auth::user();
+
+//        // 🔹 Step 1: Validate required fields
+//         $request->validate([
+//             'code' => 'required',
+//             'usdtTrc20' => 'required_without:usdtBep20',
+//             'usdtBep20' => 'required_without:usdtTrc20',
+//         ], [
+//             'code.required' => 'Please enter the verification code.',
+//             'usdtTrc20.required_without' => 'Please enter at least one wallet address.',
+//             'usdtBep20.required_without' => 'Please enter at least one wallet address.',
+//         ]);
+
+//         $usdtTrc20 = $request->input('usdtTrc20');
+//         $usdtBep20 = $request->input('usdtBep20');
+//         $code = $request->input('code');
+        
+//         if (
+//             ($usdtTrc20 && $user->usdtTrc20 == $usdtTrc20) ||
+//             ($usdtBep20 && $user->usdtBep20 == $usdtBep20)
+//         ) {
+          
+//             $notify[] = ['error', 'This wallet address already exists.'];
+//             return redirect()->back()->withNotify($notify);
+//         }
+
+//         if (!empty($usdtTrc20)) {
+//             $user->usdtTrc20 = $usdtTrc20;
+//         }
+
+//         if (!empty($usdtBep20)) {
+//             $user->usdtBep20 = $usdtBep20;
+//         }
+
+//         $user->update();
+
+//         $notify[] = ['success', 'Wallet address added or updated successfully.'];
+//         return redirect()->back()->withNotify($notify);
+
+//     } catch (\Exception $e) {
+//         Log::error('Wallet change error: ' . $e->getMessage());
+//         return back()->withErrors(['error' => $e->getMessage()])->withInput();
+//     }
+// }
 public function wallet_change(Request $request)
 {
     try {
         $user = Auth::user();
 
+        // 🔹 Step 1: Validate required fields
+        $request->validate([
+            'code' => 'required',
+            'usdtTrc20' => 'required_without:usdtBep20',
+            'usdtBep20' => 'required_without:usdtTrc20',
+        ], [
+            'code.required' => 'Please enter the verification code.',
+            'usdtTrc20.required_without' => 'Please enter at least one wallet address.',
+            'usdtBep20.required_without' => 'Please enter at least one wallet address.',
+        ]);
+
         $usdtTrc20 = $request->input('usdtTrc20');
         $usdtBep20 = $request->input('usdtBep20');
+        $code = $request->input('code');
 
+        // 🔹 Step 2: Check OTP validity
+        $otpValid = PasswordReset::where('token', $code)
+            ->where('email', $user->email)
+            ->exists();
+
+        if (!$otpValid) {
+            $notify[] = ['error', 'Invalid or expired OTP.'];
+            return redirect()->back()->withNotify($notify);
+        }
+
+        // 🔹 Step 3: Prevent duplicate wallet address
         if (
-            ($usdtTrc20 && $user->usdtTrc20 == $usdtTrc20) ||
-            ($usdtBep20 && $user->usdtBep20 == $usdtBep20)
+            ($usdtTrc20 && $user->usdtTrc20 === $usdtTrc20) ||
+            ($usdtBep20 && $user->usdtBep20 === $usdtBep20)
         ) {
-          
             $notify[] = ['error', 'This wallet address already exists.'];
             return redirect()->back()->withNotify($notify);
         }
 
+        // 🔹 Step 4: Save new wallet addresses
         if (!empty($usdtTrc20)) {
             $user->usdtTrc20 = $usdtTrc20;
         }
-
         if (!empty($usdtBep20)) {
             $user->usdtBep20 = $usdtBep20;
         }
+        $user->save();
 
-        $user->update();
+        // 🔹 Step 5: Remove OTP after successful use
+        PasswordReset::where('token', $code)
+            ->where('email', $user->email)
+            ->delete();
 
-        $notify[] = ['success', 'Wallet address added or updated successfully.'];
+        $notify[] = ['success', 'Wallet address updated successfully.'];
         return redirect()->back()->withNotify($notify);
 
     } catch (\Exception $e) {
@@ -346,7 +419,7 @@ public function sendOtp(Request $request)
             }
 
             // OTP verified successfully — delete record
-            DB::table('password_resets')->where('email', $email)->delete();
+            // DB::table('password_resets')->where('email', $email)->delete();
 
             return response()->json(['status' => 'success', 'message' => 'OTP verified successfully.']);
         } catch (\Exception $e) {

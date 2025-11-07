@@ -25,7 +25,7 @@
   }
 
   .stat-card {
-       border: 1px solid #e0e1e2;
+    border: 1px solid #e0e1e2;
     border-radius: 16px;
     padding: 12px;
     background: linear-gradient(252deg, #0c0c0c 0%, #353434 21%, #2f2e2e 39%, #1a1a1a 100%);
@@ -82,17 +82,17 @@
     border: 1px solid #202223;
     border-radius: 16px;
     padding: 12px;
-background: linear-gradient(252deg, #0c0c0c 0%, #353434 21%, #2f2e2e 39%, #1a1a1a 100%);
+    background: linear-gradient(252deg, #0c0c0c 0%, #353434 21%, #2f2e2e 39%, #1a1a1a 100%);
   }
 
   .stat .cap {
-       font-size: 16px;
+    font-size: 16px;
     color: #ffffff;
     margin-bottom: 6px;
   }
 
   .stat .big {
-       font-size: 20px;
+    font-size: 20px;
     font-weight: 700;
     color: #9d7bff;
   }
@@ -370,98 +370,98 @@ background: linear-gradient(252deg, #0c0c0c 0%, #353434 21%, #2f2e2e 39%, #1a1a1
   }
 </style>
 <style>
-    .history-table-wrapper {
-        display: block;
-        width: 100%;
-        overflow-x: auto;
-        -webkit-overflow-scrolling: touch;
-    }
+  .history-table-wrapper {
+    display: block;
+    width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
 
-    .history-table {
-        width: 100%;
-        min-width: 600px;
-        border-collapse: collapse;
-        color: #fff;
-    }
+  .history-table {
+    width: 100%;
+    min-width: 600px;
+    border-collapse: collapse;
+    color: #fff;
+  }
 
-    .history-table th,
-    .history-table td {
-        padding: 15px;
-        text-align: left;
-        border-bottom: 1px solid var(--border-color);
-    }
+  .history-table th,
+  .history-table td {
+    padding: 15px;
+    text-align: left;
+    border-bottom: 1px solid var(--border-color);
+  }
 
-    .history-table thead th {
-        font-family: 'Inter', sans-serif;
-        font-size: 14px;
-        color: var(--text-muted);
-        font-weight: 500;
-        text-transform: uppercase;
-    }
+  .history-table thead th {
+    font-family: 'Inter', sans-serif;
+    font-size: 14px;
+    color: var(--text-muted);
+    font-weight: 500;
+    text-transform: uppercase;
+  }
 
-    .history-table tbody tr:hover {
-        background-color: transparent;
-    }
+  .history-table tbody tr:hover {
+    background-color: transparent;
+  }
 
-    .history-table .plan-name {
-        font-weight: 600;
-    }
+  .history-table .plan-name {
+    font-weight: 600;
+  }
 
-    .history-table .amount-value {
-        font-weight: 600;
-    }
+  .history-table .amount-value {
+    font-weight: 600;
+  }
 
-    .history-table .profit-value {
-        font-weight: 600;
-        color: var(--status-success);
-    }
+  .history-table .profit-value {
+    font-weight: 600;
+    color: var(--status-success);
+  }
 
-    /* ===================================================================
+  /* ===================================================================
            RESPONSIVE STYLES
            =================================================================== */
-    @media (max-width: 1200px) {
-        .reinvest-layout {
-            grid-template-columns: 1fr;
-        }
-
-        .sidebar {
-            position: static;
-        }
+  @media (max-width: 1200px) {
+    .reinvest-layout {
+      grid-template-columns: 1fr;
     }
 
-    @media (max-width: 991px) {
-        .reinvest-wrapper {
-            padding: 30px 40px;
-        }
+    .sidebar {
+      position: static;
+    }
+  }
+
+  @media (max-width: 991px) {
+    .reinvest-wrapper {
+      padding: 30px 40px;
+    }
+  }
+
+  @media (max-width: 767px) {
+    .reinvest-wrapper {
+      padding: 20px;
     }
 
-    @media (max-width: 767px) {
-        .reinvest-wrapper {
-            padding: 20px;
-        }
-
-        .page-header h1 {
-            font-size: 36px;
-        }
-
-        .page-header p {
-            font-size: 16px;
-        }
-
-        .reinvest-layout {
-            gap: 30px;
-            display: block;
-        }
-
-        .section-card {
-            padding: 20px;
-            margin-bottom: 20px;
-        }
-
-        .balance-grid {
-            grid-template-columns: 1fr;
-        }
+    .page-header h1 {
+      font-size: 36px;
     }
+
+    .page-header p {
+      font-size: 16px;
+    }
+
+    .reinvest-layout {
+      gap: 30px;
+      display: block;
+    }
+
+    .section-card {
+      padding: 20px;
+      margin-bottom: 20px;
+    }
+
+    .balance-grid {
+      grid-template-columns: 1fr;
+    }
+  }
 </style>
 <main class="dashboard-wrapper">
   <div class="breadcrumb"><a href="/user">Dashboard</a> / <b>Overview &amp; Operations</b></div>
@@ -569,13 +569,13 @@ background: linear-gradient(252deg, #0c0c0c 0%, #353434 21%, #2f2e2e 39%, #1a1a1
           @endforelse
         </tbody>
       </table>
-  {{-- Pagination --}}
-    <div class="ops-pager">
-      {{ $deposit_list->links() }}
-    </div>
+      {{-- Pagination --}}
+      <div class="ops-pager">
+        {{ $deposit_list->links() }}
+      </div>
     </div>
 
-  
+
 
 
   </section>
