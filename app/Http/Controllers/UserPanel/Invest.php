@@ -859,7 +859,7 @@ public function cancel_payment($id)
     public function fundActivation(Request $request)
     {
 
-      dd($request->all());
+    //   dd($request->all());
   try{
     $validation =  Validator::make($request->all(), [
         'amount' => 'required|numeric|min:50',
@@ -951,7 +951,7 @@ public function cancel_payment($id)
     public function fundActivation2(Request $request)
     {
 
-      dd($request->all());
+    //   dd($request->all());
   try{
     $validation =  Validator::make($request->all(), [
         'amount' => 'required|numeric|min:50',

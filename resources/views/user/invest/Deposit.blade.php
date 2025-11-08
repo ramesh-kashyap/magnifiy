@@ -760,20 +760,197 @@
          // Amount typing
          amountInput.addEventListener('input', calc);
 
-        // Initial Selection and Calculation
-        const firstPlan = plansContainer.querySelector('.plan-card');
-        if (firstPlan) {
-            firstPlan.click();
-        }
-        
-        const firstCrypto = cryptoContainer.querySelector('.crypto-card');
-        if (firstCrypto) {
-            firstCrypto.click();
-        }
+         // Defaults (select first plan & first crypto)
+         const firstPlan = plansContainer.querySelector('.plan-card');
+         if (firstPlan) firstPlan.click();
 
-        calculate();
+         const firstCrypto = cryptoContainer.querySelector('.crypto-card');
+         if (firstCrypto) firstCrypto.click();
+
+         calc();
+     });
+ </script>
+
+<script>
+(function(){
+  const $ = (sel, root=document) => root.querySelector(sel);
+
+  // Tiny toast
+  function toast(msg){
+    const n = document.createElement('div');
+    n.textContent = msg;
+    n.style.cssText = `
+      position:fixed; bottom:18px; left:50%; transform:translateX(-50%);
+      background:#2b2f36; color:#e6e8eb; border:1px solid #3a3f47; padding:10px 14px;
+      border-radius:10px; font-weight:600; z-index:9999;`;
+    document.body.appendChild(n);
+    setTimeout(() => n.remove(), 1400);
+  }
+
+  async function copyText(text){
+    try { await navigator.clipboard.writeText(text); toast('Copied!'); }
+    catch { toast('Copy failed'); }
+  }
+
+  // PUBLIC: call this with your backend JSON payload
+  window.renderPaymentPanel = function(payload){
+    const { address, amount, currency, network, qrcodeSvg } = payload || {};
+    const panel = document.getElementById('payment-panel');
+    if (!panel) return;
+
+       // hide calculator when showing QR
+    const calcCard = document.querySelector('.calculator-card');
+    if (calcCard) calcCard.style.display = 'none';
+
+    
+    panel.innerHTML = `
+      <h3 class="pay-title">4. Complete Your Payment</h3>
+      <div class="pay-grid">
+        <div class="pay-qr">${qrcodeSvg || ''}</div>
+        <div class="pay-right">
+          <div class="pay-meta">
+            <span class="pay-badge">Network</span>
+            <span class="pay-value">${network || '-'}</span>
+          </div>
+
+          <div class="pay-amount">
+            <div class="pay-amount-label">Pay Amount</div>
+            <div class="pay-amount-value">${amount || '0'} <span>${currency || ''}</span></div>
+          </div>
+
+          <label class="pay-label">Wallet Address</label>
+          <div class="pay-copyrow">
+            <input class="pay-input" id="payAddress" value="${address || ''}" readonly />
+            <button class="pay-btn ghost" id="btnCopyAddr" type="button">Copy</button>
+          </div>
+
+          <label class="pay-label">Exact Amount</label>
+          <div class="pay-copyrow">
+            <input class="pay-input" id="payAmount" value="${amount || '0'}" readonly />
+            <button class="pay-btn ghost" id="btnCopyAmt" type="button">Copy</button>
+          </div>
+
+          <div class="pay-note">
+            Send exactly <strong>${amount || '0'} ${currency || ''}</strong> on
+            <strong>${network || '-'}</strong> to the address above. Network or amount
+            mismatches may delay confirmation.
+          </div>
+
+          <div class="pay-actions">
+            <button type="button" class="pay-btn back" id="btnBack">← Back</button>
+           
+          </div>
+        </div>
+      </div>
+    `;
+    panel.style.display = '';
+
+    // Wire buttons
+    $('#btnCopyAddr', panel)?.addEventListener('click', () => {
+      copyText($('#payAddress', panel)?.value || '');
     });
-    </script>
+    $('#btnCopyAmt', panel)?.addEventListener('click', () => {
+      copyText($('#payAmount', panel)?.value || '');
+    });
+    $('#btnBack', panel)?.addEventListener('click', () => {
+      panel.style.display = 'none';
+       const calcCard = document.querySelector('.calculator-card');
+    if (calcCard) calcCard.style.display = 'block';
+    });
+    $('#btnIHavePaid', panel)?.addEventListener('click', () => {
+      toast('Payment will be detected automatically after confirmation.');
+    });
+  };
+})();
+</script>
+
+ <script>
+(function(){
+  const formEl              = document.getElementById('investment-form');
+  const investBtn           = formEl.querySelector('.btn-invest');
+  const amountInput         = document.getElementById('amount-input');
+
+  const selectedPlanInput   = document.getElementById('selected-plan-input');
+  const selectedSystemInput = document.getElementById('selected-system-input');
+
+  const summaryPlanEl       = document.getElementById('summary-plan');
+  const summaryProfitEl     = document.getElementById('summary-profit');
+  const summaryTotalEl      = document.getElementById('summary-total');
+
+  const paymentPanel        = document.getElementById('payment-panel');
+
+  // Small helper: loader state on button
+  function setLoading(btn, on, text='Invest Now'){
+    if (!btn) return;
+    if (on) {
+      btn.dataset.label = btn.textContent.trim();
+      btn.innerHTML = `<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Generating address…`;
+      btn.disabled = true;
+    } else {
+      btn.textContent = btn.dataset.label || text;
+      btn.disabled = false;
+    }
+  }
+
+  // Copy helper
+  async function copyText(text){
+    try {
+      await navigator.clipboard.writeText(text);
+      alert('Copied!');
+    } catch (e){
+      alert('Copy failed');
+    }
+  }
+
+
+  // Submit handler -> AJAX quote
+  formEl.addEventListener('submit', async (e) => {
+    e.preventDefault();
+
+    const amount = parseFloat((amountInput.value || '0').toString().replace(',', '.')) || 0;
+    const planId = selectedPlanInput.value;
+    const system = selectedSystemInput.value; // bep20 | trc20
+    const currency = 'USDT';                 // from your selection; here fixed
+
+    if (!planId)  return alert('Please select a plan.');
+    if (!system)  return alert('Please select a payment network.');
+    if (!amount || amount <= 0) return alert('Please enter a valid amount.');
+
+    setLoading(investBtn, true);
+
+    try {
+      const res = await fetch(`{{ route('user.quote') }}`,
+      
+      
+       {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-CSRF-TOKEN': '{{ csrf_token() }}',
+          'Accept': 'application/json',
+        },
+        body: JSON.stringify({ plan_id: planId, system, currency, amount })
+      });
+
+      const json = await res.json();
+      if (!res.ok || !json.ok) {
+        throw new Error(json?.message || 'Failed to create payment quote.');
+      }
+
+      // Show the payment panel with QR + address
+      renderPaymentPanel(json);
+      // Optionally scroll to the payment panel
+      paymentPanel.scrollIntoView({ behavior:'smooth', block:'start' });
+
+    } catch (err) {
+      console.error(err);
+      alert(err.message || 'Something went wrong.');
+    } finally {
+      setLoading(investBtn, false);
+    }
+  });
+})();
+</script>
 
  </body>
 
