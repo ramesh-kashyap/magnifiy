@@ -646,6 +646,7 @@
                                 <tr class="text-center">
                                     <td colspan="8"
                                         class="text-center">
+                                            <div class="user-wrapper" style="position: relative; display: inline-block;">
 
                                         <input type="image" name="ctl00$ContentPlaceHolder1$ImageButton0"
                                             id="ctl00_ContentPlaceHolder1_ImageButton0" data-toggle="tooltip"
@@ -662,6 +663,20 @@
                                         <span id="ctl00_ContentPlaceHolder1_Label7">
                                             <?= @$mydata->username ? strtoupper(@$mydata->username) : "" ?>
                                         </span>
+                                            @if(!empty($mydata) && !empty($mydata->username))
+
+                                        <div class="user-popup">
+                                            <p><strong>Name:</strong> {{ @$mydata->name ?? 'N/A' }}</p>
+                                            <p><strong>Username:</strong> {{ @$mydata->username ?? 'N/A' }}</p>
+                                            <p><strong>Package:</strong> $ {{ @$mydata->package ?? '0.00' }}</p>
+                                            <p><strong>Sponsor Id:</strong> {{ @$mydata->sponsor_username ?? 'N/A' }}</p>
+
+                                            <p><strong>Join Date:</strong> {{ @$mydata->created_at ?? '—' }}</p>
+
+                                        </div>
+                                        @endif
+                                                            </div>
+
                                     </td>
                                 </tr>
                                 <tr class="text-center">
