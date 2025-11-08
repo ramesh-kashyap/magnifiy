@@ -475,43 +475,44 @@
     </div>
     <div class="stat-grid">
       <div class="stat">
-        <div class="cap">Deposits (Top-ups) paid</div>
+        <div class="cap">Total Deposits</div>
         <div class="big">
-          $0 </div>
-        <div class="sub">Count: 0</div>
+          ${{ number_format(Auth::user()->investment->sum('amount'), 2) }} {{generalDetail()->cur_text}} </div>
+        <div class="sub"></div>
       </div>
 
       <div class="stat">
         <div class="cap">Withdrawals</div>
         <div class="big">
-          $0 </div>
-        <div class="sub">Count: 0</div>
+          ${{ number_format(Auth::user()->withdrawtotal(), 2) }}</div>
+        <div class="sub"></div>
       </div>
 
       <div class="stat">
-        <div class="cap">Accruals (paid)</div>
+        <div class="cap">Total Income </div>
         <div class="big">
-          $0 </div>
-        <div class="sub">Count: 0</div>
+          ${{ number_format(Auth::user()->totalIncome->sum('comm'), 2) }}</div>
+        <div class="sub"></div>
       </div>
 
       <div class="stat">
-        <div class="cap">Portfolio (Deposits)</div>
+        <div class="cap">Active Deposits</div>
         <div class="big">
-          Active: $0 </div>
+          Active: {{ number_format(Auth::user()->Activeinvestment->sum('amount'), 2) }} </div>
         <div class="sub">
-          Closed: $0 · Cnt A/C: 0/0 </div>
+          </div>
       </div>
 
       <div class="stat">
-        <div class="cap">Referral rewards (sum)</div>
+        <div class="cap">Referral Bonus (sum)</div>
         <div class="big">
-          $0 </div>
+          ${{ number_format(Auth::user()->level_bonus->sum('comm'), 2) }}  {{generalDetail()->cur_text}}</div>
         <div class="sub">
-          Currencies: 0 </div>
+           </div>
       </div>
     </div>
   </section>
+
 
 
   <section class="ops-card">

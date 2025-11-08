@@ -204,7 +204,7 @@ class User extends Authenticatable
 
 public function investment()
 {
-      return $this->hasMany('App\Models\Investment','user_id','id')->where('status',"Active");
+      return $this->hasMany('App\Models\Investment','user_id','id');
 }
 public function Activeinvestment(){
         return $this->hasMany('App\Models\Investment','user_id','id')->where('status','Active');
