@@ -814,7 +814,7 @@
                                      @foreach($withdrawals as $key => $withdraw)
                                      <tr>
                                          <td>{{ $key + 1 }}</td>
-                                         <td>₹{{ number_format($withdraw->amount, 2) }}</td>
+                                         <td>${{ number_format($withdraw->amount, 2) }}</td>
                                          <td style="color:
                                            {{ $withdraw->status == 'completed' ? 'green' : ($withdraw->status == 'pending' ? 'orange' : 'red') }}">
                                              {{ ucfirst($withdraw->status) }}
