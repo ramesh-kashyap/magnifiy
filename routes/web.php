@@ -120,6 +120,12 @@ Route::any('/SubmitBuyFund', [App\Http\Controllers\UserPanel\AddFund::class, 'Su
 
 // invest
 Route::get('/invest', [App\Http\Controllers\UserPanel\Invest::class, 'index'])->name('user.invest');
+Route::get('/plan', [App\Http\Controllers\UserPanel\Invest::class, 'plan'])->name('user.plan');
+
+
+Route::post('/quotes', [App\Http\Controllers\UserPanel\Invest::class, 'quoteCryptapis'])->name('user.quotes');
+
+Route::post('/quote', [App\Http\Controllers\UserPanel\Invest::class, 'quoteCryptapi'])->name('user.quote');
 Route::get('/re-invest', [App\Http\Controllers\UserPanel\Invest::class, 'index1'])->name('user.re-invest');
 Route::get('/compounding', [App\Http\Controllers\UserPanel\Invest::class, 'compounding'])->name('user.compounding');
 Route::post('/compounding-deposit', [App\Http\Controllers\UserPanel\Invest::class, 'compound'])->name('compounding.deposit');
@@ -127,6 +133,8 @@ Route::post('/compounding-transfer', [App\Http\Controllers\UserPanel\Invest::cla
 Route::get('/deposit', [App\Http\Controllers\UserPanel\Invest::class, 'deposit'])->name('user.deposit');
 Route::get('/cancel-payment/{id}', [App\Http\Controllers\UserPanel\Invest::class, 'cancel_payment'])->name('user.cancel-payment');
 Route::post('/fundActivation', [App\Http\Controllers\UserPanel\Invest::class, 'fundActivation'])->name('user.fundActivation');
+Route::post('/fundActivation2', [App\Http\Controllers\UserPanel\Invest::class, 'fundActivation2'])->name('user.fundActivation2');
+
 Route::any('/confirmDeposit', [App\Http\Controllers\UserPanel\Invest::class, 'confirmDeposit'])->name('user.confirmDeposit');
 Route::any('/confirmDeposit_new', [App\Http\Controllers\UserPanel\Invest::class, 'confirmDeposit_new'])->name('user.confirmDeposit_new');
 

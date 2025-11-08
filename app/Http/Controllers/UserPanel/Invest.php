@@ -8,6 +8,8 @@ use App\Models\User;
 use App\Models\Investment;
 use App\Models\Compound;
 use App\Models\Income;
+use App\Models\plan;
+
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\URL;
 use Illuminate\Support\Facades\Auth;
@@ -18,6 +20,8 @@ use Redirect;
 use Hash;
 use Helper;
 use DB;
+use SimpleSoftwareIO\QrCode\Facades\QrCode; // composer require simplesoftwareio/simple-qrcode
+
 class Invest extends Controller
 {
 
@@ -70,6 +74,76 @@ class Invest extends Controller
 
     }  
 
+
+
+
+
+
+    public function plan()
+    {
+
+    $user = auth()->user();
+$notes = Plan::where('user_id', $user->id)
+                 ->orderBy('id', 'desc')
+                 ->get();
+
+
+     $userInfo = auth()->user(); // Get authenticated user
+        $refId = $userInfo->username;
+
+        $url = 'https://api.cryptapi.io/bep20/usdt/create/';
+        $queryParams = [
+            'callback'      => 'https://helixfund.live/dynamicUpiCallback?refid=' . $refId,
+            'address'       => '0x3D297d99cCC6C872F6770978c5C1E794Da79f735',
+            'pending'       => 0,
+            'confirmations' => 1,
+            'email'         => 'string',
+            'post'          => 0,
+            'priority'      => 'default',
+            'multi_token'   => 0,
+            'multi_chain'   => 0,
+            'convert'       => 0,
+        ];
+
+        // Log the request being sent
+       /* Log::info('Sending request to CryptAPI', [
+            'url' => $url,
+            'params' => $queryParams,
+            'user' => $userInfo->id ?? null,
+        ]);*/
+
+        $response = Http::get($url, $queryParams);
+
+      
+
+        $data = $response->json();
+
+        // Log decoded JSON
+        // Log::info('Parsed response from CryptAPI', $data);
+
+        unset($data['callback_url']); // remove callback_url
+
+        // Log after cleaning up data
+        Log::info('Final response data sent to view', $data);
+
+        $this->data['data'] = $data;
+                $this->data['deposit_list'] = $notes;
+
+        $this->data['page'] = 'user.invest.plan';
+
+        return $this->dashboard_layout();
+
+    }  
+
+
+
+
+
+
+
+
+
+
   public function index1()
     {
      $userInfo = auth()->user(); // Get authenticated user
@@ -81,6 +155,244 @@ class Invest extends Controller
         return $this->dashboard_layout();
 
     }  
+
+
+        public function quoteCryptapi(Request $req)
+    {
+        $user = $req->user();
+
+        $data = $req->validate([
+            'plan_id'  => 'required|in:1,2,3,4',
+            'system'   => 'required|in:bep20,trc20',
+            'currency' => 'required|in:USDT',
+            'amount'   => 'required|numeric|min:1',   // adjust min per your biz rules
+        ]);
+
+        $system   = $data['system'];   // bep20 | trc20
+        $currency = $data['currency']; // USDT
+        $amount   = round((float)$data['amount'], 2);
+
+        // Choose merchant address by network
+        $merchantAddress = $system === 'bep20'
+            ? '0x3D297d99cCC6C872F6770978c5C1E794Da79f735'
+            : 'TD4KhBToV1nKRumY4L7jJzR4cWLK9xzmyb';
+
+        if (!$merchantAddress) {
+            return response()->json([
+                'ok' => false,
+                'message' => 'Merchant wallet not configured for '.$system,
+            ], 422);
+        }
+
+        // Create a unique reference for this quote (store in DB if you track orders)
+        $ref = Str::upper(Str::random(10));
+
+        // Build callback URL (CryptAPI will ping this on payment events)
+        $callback = 'https://helixfund.live/dynamicUpiCallback?refid=' . $user->username;
+
+        // Prepare CryptAPI create endpoint
+        $baseUrl = "https://api.cryptapi.io/{$system}/usdt/create/";
+        $queryParams = [
+            'callback'      => $callback,                  // your webhook URL
+            'address'       => $merchantAddress,          // where funds will be forwarded by CryptAPI
+            'pending'       => 1,                         // also notify on pending txs
+            'confirmations' => 1,                         // confirmations required
+            'email'         => env('CRYPTAPI_EMAIL',''),  // optional
+            'post'          => 1,                         // POST webhook (JSON)
+            'priority'      => 'default',
+            'multi_token'   => 0,
+            'multi_chain'   => 0,
+            'convert'       => 0,
+        ];
+
+        try {
+            $response = Http::timeout(20)->acceptJson()->get($baseUrl, $queryParams);
+
+            if (!$response->ok()) {
+                Log::warning('CryptAPI create failed', ['code'=>$response->status(), 'body'=>$response->body()]);
+                return response()->json([
+                    'ok' => false,
+                    'message' => 'Unable to create payment address',
+                ], 502);
+            }
+
+            $provider = $response->json();
+
+            // CryptAPI returns several fields; to be safe we generate our own QR
+            // Use address_in (deposit address controlled by CryptAPI) if present, otherwise fallback
+            $depositAddress =
+                $provider['address_in'] ??
+                $provider['address_in']    ??
+                null;
+
+            if (!$depositAddress) {
+                Log::warning('CryptAPI missing deposit address', ['provider'=>$provider]);
+                return response()->json([
+                    'ok' => false,
+                    'message' => 'No deposit address returned by provider',
+                ], 502);
+            }
+
+            // Build a generic QR payload (scanners will capture address + amount hint)
+            $qrPayload = json_encode([
+                'network'  => strtoupper($system),
+                'currency' => $currency,
+                'address'  => $depositAddress,
+                'amount'   => number_format($amount, 2, '.', ''),
+                'ref'      => $ref,
+            ]);
+
+            $qrcodeSvg = QrCode::format('svg')->size(240)->margin(1)->generate($qrPayload);
+
+            // Optional: set expiration window for this quote (e.g., 30 min)
+            $expiresAt = now()->addMinutes(30)->toIso8601String();
+
+            // (Optional) persist a quote row if you want to reconcile later
+            // Quote::create([...])
+
+            // Return a frontend-friendly payload
+            return response()->json([
+                'ok'         => true,
+                'address'    => $depositAddress,
+                'network'    => strtoupper($system),
+                'currency'   => $currency,
+                'amount'     => number_format($amount, 2, '.', ''),
+                'qrcodeSvg'  => $qrcodeSvg,
+                'ref'        => $ref,
+                'expires_at' => $expiresAt,
+                'provider_raw' => $provider,   // keep for debugging/auditing
+            ]);
+
+        } catch (\Throwable $e) {
+            Log::error('CryptAPI exception', ['e'=>$e]);
+            return response()->json([
+                'ok' => false,
+                'message' => 'Service temporarily unavailable',
+            ], 500);
+        }
+    }
+
+    
+
+
+
+        public function quoteCryptapis(Request $req)
+    {
+        $user = $req->user();
+
+        $data = $req->validate([
+            'plan_id'  => 'required|in:1,2,3,4',
+            'system'   => 'required|in:bep20,trc20',
+            'currency' => 'required|in:USDT',
+            'amount'   => 'required|numeric|min:1',   // adjust min per your biz rules
+        ]);
+
+        $system   = $data['system'];   // bep20 | trc20
+        $currency = $data['currency']; // USDT
+        $amount   = round((float)$data['amount'], 2);
+
+        // Choose merchant address by network
+        $merchantAddress = $system === 'bep20'
+            ? '0x3D297d99cCC6C872F6770978c5C1E794Da79f735'
+            : 'TD4KhBToV1nKRumY4L7jJzR4cWLK9xzmyb';
+
+        if (!$merchantAddress) {
+            return response()->json([
+                'ok' => false,
+                'message' => 'Merchant wallet not configured for '.$system,
+            ], 422);
+        }
+
+        // Create a unique reference for this quote (store in DB if you track orders)
+        $ref = Str::upper(Str::random(10));
+
+        // Build callback URL (CryptAPI will ping this on payment events)
+        $callback = 'https://helixfund.live/dynamicUpiCallback?refid=' . $user->username;
+
+        // Prepare CryptAPI create endpoint
+        $baseUrl = "https://api.cryptapi.io/{$system}/usdt/create/";
+        $queryParams = [
+            'callback'      => $callback,                  // your webhook URL
+            'address'       => $merchantAddress,          // where funds will be forwarded by CryptAPI
+            'pending'       => 1,                         // also notify on pending txs
+            'confirmations' => 1,                         // confirmations required
+            'email'         => env('CRYPTAPI_EMAIL',''),  // optional
+            'post'          => 1,                         // POST webhook (JSON)
+            'priority'      => 'default',
+            'multi_token'   => 0,
+            'multi_chain'   => 0,
+            'convert'       => 0,
+        ];
+
+        try {
+            $response = Http::timeout(20)->acceptJson()->get($baseUrl, $queryParams);
+
+            if (!$response->ok()) {
+                Log::warning('CryptAPI create failed', ['code'=>$response->status(), 'body'=>$response->body()]);
+                return response()->json([
+                    'ok' => false,
+                    'message' => 'Unable to create payment address',
+                ], 502);
+            }
+
+            $provider = $response->json();
+
+            // CryptAPI returns several fields; to be safe we generate our own QR
+            // Use address_in (deposit address controlled by CryptAPI) if present, otherwise fallback
+            $depositAddress =
+                $provider['address_in'] ??
+                $provider['address_in']    ??
+                null;
+
+            if (!$depositAddress) {
+                Log::warning('CryptAPI missing deposit address', ['provider'=>$provider]);
+                return response()->json([
+                    'ok' => false,
+                    'message' => 'No deposit address returned by provider',
+                ], 502);
+            }
+
+            // Build a generic QR payload (scanners will capture address + amount hint)
+            $qrPayload = json_encode([
+                'network'  => strtoupper($system),
+                'currency' => $currency,
+                'address'  => $depositAddress,
+                'amount'   => number_format($amount, 2, '.', ''),
+                'ref'      => $ref,
+            ]);
+
+            $qrcodeSvg = QrCode::format('svg')->size(240)->margin(1)->generate($qrPayload);
+
+            // Optional: set expiration window for this quote (e.g., 30 min)
+            $expiresAt = now()->addMinutes(30)->toIso8601String();
+
+            // (Optional) persist a quote row if you want to reconcile later
+            // Quote::create([...])
+
+            // Return a frontend-friendly payload
+            return response()->json([
+                'ok'         => true,
+                'address'    => $depositAddress,
+                'network'    => strtoupper($system),
+                'currency'   => $currency,
+                'amount'     => number_format($amount, 2, '.', ''),
+                'qrcodeSvg'  => $qrcodeSvg,
+                'ref'        => $ref,
+                'expires_at' => $expiresAt,
+                'provider_raw' => $provider,   // keep for debugging/auditing
+            ]);
+
+        } catch (\Throwable $e) {
+            Log::error('CryptAPI exception', ['e'=>$e]);
+            return response()->json([
+                'ok' => false,
+                'message' => 'Service temporarily unavailable',
+            ], 500);
+        }
+    }
+
+
+
 
 
     public function compounding(Request $request)
@@ -112,6 +424,11 @@ class Invest extends Controller
         return $this->dashboard_layout();
 
     }  
+
+
+
+
+
 
 
 
@@ -542,7 +859,99 @@ public function cancel_payment($id)
     public function fundActivation(Request $request)
     {
 
-      // dd("hiii");
+      dd($request->all());
+  try{
+    $validation =  Validator::make($request->all(), [
+        'amount' => 'required|numeric|min:50',
+        'paymentMode' => 'required',
+        'transaction_id' => 'required|unique:investments,transaction_id',
+    ]);
+
+    if($validation->fails()) {
+        Log::info($validation->getMessageBag()->first());
+
+        return redirect()->route('user.invest')->withErrors($validation->getMessageBag()->first())->withInput();
+    }
+
+ 
+
+       $user=Auth::user();
+       
+       $plan="1";
+
+       $user_detail=User::where('username',$user->username)->orderBy('id','desc')->limit(1)->first();
+       $invest_check=Investment::where('user_id',$user_detail->id)->where('status','!=','Decline')->orderBy('id','desc')->limit(1)->first();
+       $invoice = substr(str_shuffle("0123456789"), 0, 7);
+       $joining_amt =$request->amount;
+        $plan ='BEGINNER';
+       if ($joining_amt>=50 && $joining_amt<=200) 
+       {
+        $plan ='BEGINNER';
+       }
+       elseif($joining_amt>=400 && $joining_amt<=800)
+       {
+        $plan ='STANDARD';
+       }
+       elseif($joining_amt>=1000 && $joining_amt<=2000)
+       {
+        $plan ='EXCLUSIVE';
+       }
+       elseif($joining_amt>=2500 && $joining_amt<=5000)
+       {
+        $plan ='ULTIMATE';
+       }
+
+       elseif($joining_amt>=5000 && $joining_amt<=10000)
+       {
+        $plan ='PREMIUM';
+       }
+
+       elseif($joining_amt>=5000)
+       {
+        $plan ='PREMIUM';
+       }
+      
+
+
+      $last_package = ($invest_check)?$invest_check->amount:0;
+
+        
+           $data = [
+                'plan' => $plan,
+                'transaction_id' =>$request->transaction_id,
+                'user_id' => $user_detail->id,
+                'user_id_fk' => $user_detail->username,
+                'amount' => $request->amount,
+                'payment_mode' =>$request->paymentMode,
+                'status' => 'Pending',
+                'sdate' => Date("Y-m-d"),
+                'active_from' => $user->username,
+            ];
+            $payment =  Investment::insert($data);
+            
+
+        $notify[] = ['success','Deposit request submitted successfully'];
+        return redirect()->route('user.invest')->withNotify($notify);
+
+   
+
+  }
+   catch(\Exception $e){
+    Log::info('error here');
+    Log::info($e->getMessage());
+    print_r($e->getMessage());
+    die("hi");
+    return  redirect()->route('user.invest')->withErrors('error', $e->getMessage())->withInput();
+      }
+
+ }
+
+
+
+    public function fundActivation2(Request $request)
+    {
+
+      dd($request->all());
   try{
     $validation =  Validator::make($request->all(), [
         'amount' => 'required|numeric|min:50',

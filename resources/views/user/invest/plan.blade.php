@@ -498,47 +498,41 @@
 
  <main class="investment-wrapper">
      <div class="page-header">
-         <h1>Make an <span>Investment</span></h1>
-         <p>Choose a plan, select a payment system, and enter the amount
-             to calculate your potential profit.</p>
+         <h1>Buy  <span>Bot Plan</span></h1>
+         <p>Start your journey — choose a plan, pick your payment system, and see how your investment can grow.</p>
      </div>
 
-     <form id="investment-form" action="{{ route('user.fundActivation') }}" method="post">
+     <form id="investment-form" action="{{ route('user.fundActivation2') }}" method="post">
          @csrf
 
          <div class="investment-layout">
              <div class="main-content">
                  <section class="section-card">
-                     <h3>1. Select a Tariff Plan</h3>
+                     <h3>1. Select a Bot Plan</h3>
                      <div class="plans-grid" id="plans-container">
 
                          <div class="plan-card selected" data-plan-id="1">
-                             <div class="plan-percent">Monthly Plan</div>
-                             <div class="plan-term">Earn 5% Monthly Profit</div>
-                             <div class="plan-details">Unlock your rewards every month</div>
+                             <div class="plan-percent">6 Months Plan</div>
+                             <div class="plan-term"> Bot Fees $50</div>
+                             <div class="plan-details">Buy your Bot Plan</div>
                              <div class="plan-limits" data-plan-id-limits="1"></div>
                          </div>
 
                          <div class="plan-card" data-plan-id="2">
-                             <div class="plan-percent">Quarterly Plan</div>
-                             <div class="plan-term">Earn 6% Monthly Profit</div>
-                             <div class="plan-details">Unlock your rewards at the end of each quarter</div>
+                             <div class="plan-percent">12 Months Plan</div>
+                             <div class="plan-term"> Bot Fees $100  </div>
+                             <div class="plan-details">Buy your Bot Plan</div>
                              <div class="plan-limits" data-plan-id-limits="2"></div>
                          </div>
 
                          <div class="plan-card" data-plan-id="3">
-                             <div class="plan-percent">Half-Yearly Plan</div>
-                             <div class="plan-term">Earn 7% Monthly Profit</div>
-                             <div class="plan-details">Unlock your rewards after six months</div>
+                             <div class="plan-percent">36 Months Plan</div>
+                             <div class="plan-term">Bot Fees  $150  </div>
+                             <div class="plan-details">Buy your Bot Plan</div>
                              <div class="plan-limits" data-plan-id-limits="3"></div>
                          </div>
 
-                         <div class="plan-card" data-plan-id="4">
-                             <div class="plan-percent">Yearly Plan</div>
-                             <div class="plan-term">Earn 8% Monthly Profit</div>
-                             <div class="plan-details">Unlock your rewards after one year</div>
-                             <div class="plan-limits" data-plan-id-limits="4"></div>
-                         </div>
+                        
 
                      </div>
                  </section>
@@ -563,15 +557,21 @@
              <div class="sidebar">
                  <section class="calculator-card">
                      <div class="calculator-content">
-                         <h3>3. Calculate Your Profit</h3>
+                         <h3>3. Deposit </h3>
                          <div class="input-group">
                              <label for="amount">Enter Amount</label>
+
+
                              <div class="amount-input-wrapper">
                                  <span class="amount-input-currency" id="amount-currency-symbo"><img
                                          style="width: 30px;height:30px" src="/assets/icons8-tether-64.png"
                                          alt="" srcset=""></span>
+
+
                                  <input type="text" class="amount-input" id="amount-input" name="amount"
                                      placeholder="0.00" value="0">
+
+
                              </div>
                              <div class="input-limits-info" id="input-limits"></div>
                          </div>
@@ -579,25 +579,22 @@
                          <div class="summary-block">
                              <div class="summary-row">
                                  <span class="label">Selected Plan</span>
-                                 <span class="value" id="summary-plan">MEgnifly: Hash
-                                     Key</span>
+                                 <span class="value" id="summary-plan">6 months Plan
+                                     </span>
                              </div>
+                            <div class="summary-row">
+  <span class="label">Currency</span>
+  <div>
+    <span class="value profit" id="summary-profit"> USDT BEP20</span>
+  </div>
+</div>
                              <div class="summary-row">
-                                 <span class="label">Monthly Profit</span>
-                                 <div>
-                                     <span class="value profit" id="summary-profit">+ 0
-                                         DOGE</span>
-                                     <div class="value profit-usd" id="summary-profit-usd">≈
-                                         $0.00</div>
-                                 </div>
-                             </div>
-                             <div class="summary-row">
-                                 <span class="label">Total Return</span>
-                                 <span class="value total" id="summary-total">0 DOGE</span>
+                                 <span class="label">Amount</span>
+                                 <span class="value total" id="">0</span>
                              </div>
                          </div>
 
-                         <button type="submit" class="btn-invest">Invest
+                         <button type="submit" class="btn-invest">Buy
                              Now</button>
                      </div>
                  </section>
@@ -609,18 +606,54 @@
          </div>
          </section>
          <br>
+
+
+
          <section class="dashboard-card">
              <div class="card-header">
                  <h3>Latest Deposits</h3>
                  <a href="/user/operations">All</a>
              </div>
 
-             <ul class="transactions-list">
-                 <li class="transaction-item-empty">
-                     <p>No deposits yet.</p>
-                 </li>
-             </ul>
+                <div class="history-table-wrapper">
+      <table class="history-table" id="resultsTable">
+        <thead>
+          <tr>
+            <th>S.No</th>
+            <th>Amount</th>
+            <th>Payment Mode</th>
+            <th>Start Date</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody style="
+    color: white;
+">
+
+     @forelse($deposit_list as $key => $deposit)
+          <tr>
+            <td>{{ $key + 1 }}</td>
+            <td>${{ number_format($deposit->amount, 2) }}</td>
+            <td>{{($deposit->payment_mode) }}</td>
+            <td>{{ \Carbon\Carbon::parse($deposit->created_at)->format('d M Y') }}</td>
+            <td>
+{{($deposit->status)}}            </td>
+          </tr>
+           @empty
+          <tr>
+            <td colspan="5" class="text-center">No deposit history found.</td>
+          </tr>
+          @endforelse
+        
+        </tbody>
+      </table>
+      <div class="ops-pager">
+    </div>
          </section>
+
+
+
+         
          </div>
          </div>
          <input type="hidden" name="plan" id="selected-plan-input" value="1">
@@ -629,151 +662,307 @@
  </main>
 
 
- <script>
-     document.addEventListener('DOMContentLoaded', () => {
-         /* ===== Plans: monthly % only (calc = Monthly) ===== */
-         const plans = [{
-                 id: 1,
-                 name: 'Monthly Plan',
-                 description: 'MEgnifly: Hash Key',
-                 monthlyPercent: 5
-             },
-             {
-                 id: 2,
-                 name: 'Quarterly Plan',
-                 description: 'MEgnifly: Cipher Rig',
-                 monthlyPercent: 6
-             },
-             {
-                 id: 3,
-                 name: 'Half-Yearly Plan',
-                 description: 'MEgnifly: Enigma Protocol',
-                 monthlyPercent: 7
-             },
-             {
-                 id: 4,
-                 name: 'Yearly Plan',
-                 description: 'MEgnifly: Genesis Code',
-                 monthlyPercent: 8
-             },
-         ];
 
-         /* ===== Simple currency map for USD conversion (edit as needed) ===== */
-         const rates = {
-             USD: 1,
-             BTC: 122988.2,
-             LTC: 120,
-             DOGE: 0.26,
-             ETH: 4539.5,
-             XRP: 3,
-             TRX: 0.34,
-             BNB: 1168,
-             USDT: 1,
-             TON: 2.81
-         };
 
-         const plansContainer = document.getElementById('plans-container');
-         const cryptoContainer = document.getElementById('crypto-container');
-         const amountInput = document.getElementById('amount-input');
 
-         const summaryPlanEl = document.getElementById('summary-plan');
-         const summaryProfitEl = document.getElementById('summary-profit');
-         const summaryProfitUsdEl = document.getElementById('summary-profit-usd');
-         const summaryTotalEl = document.getElementById('summary-total');
-         const amountCurrencySymbolEl = document.getElementById('amount-currency-symbol');
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+    const plans = [
+        { id: 1, name: '6 Months Plan', description: '50 $ Profit', monthlyPercent: 50 },
+        { id: 2, name: '12 Months Plan', description: '100 $ Profit', monthlyPercent: 100 },
+        { id: 3, name: '36 Months Plan', description: '150 $ Profit', monthlyPercent: 150 },
+    ];
 
-         const selectedPlanInput = document.getElementById('selected-plan-input');
-         const selectedSystemInput = document.getElementById('selected-system-input');
+    const rates = {
+        USD: 1,
+        BTC: 122988.2,
+        LTC: 120,
+        DOGE: 0.26,
+        ETH: 4539.5,
+        XRP: 3,
+        TRX: 0.34,
+        BNB: 1168,
+        USDT: 1,
+        TON: 2.81
+    };
 
-         let selectedPlan = null;
-         let selectedCurrency = null;
-         let selectedSystemId = null;
+    const plansContainer = document.getElementById('plans-container');
+    const cryptoContainer = document.getElementById('crypto-container');
+    const amountInput = document.getElementById('amount-input');
 
-         function fmt(num, currency) {
-             if (currency === 'USD') return Number(num).toFixed(2);
-             if (currency === 'BTC' || currency === 'ETH') return Number(num).toFixed(8).replace(/\.?0+$/, '');
-             return Number(num).toFixed(4).replace(/\.?0+$/, '');
-         }
+    const summaryPlanEl = document.getElementById('summary-plan');
+    const summaryProfitEl = document.getElementById('summary-profit');
+    const summaryTotalEl = document.querySelector('.summary-row .total');
+    const summaryProfitUsdEl = document.getElementById('summary-profit-usd');
+    const amountCurrencySymbolEl = document.getElementById('amount-currency-symbol');
 
-         function calc() {
-             if (!selectedPlan || !selectedCurrency) {
-                 summaryProfitEl.textContent = '...';
-                 summaryTotalEl.textContent = '...';
-                 summaryProfitUsdEl.textContent = '';
-                 return;
-             }
+    const selectedPlanInput = document.getElementById('selected-plan-input');
+    const selectedSystemInput = document.getElementById('selected-system-input');
 
-             const raw = (amountInput.value || '').toString().replace(',', '.');
-             const amount = parseFloat(raw) || 0;
-             const rateToUsd = rates[selectedCurrency] || 0;
+    let selectedPlan = null;
+    let selectedCurrency = "USDT BEP20"; // ✅ Default currency name
+    let selectedSystemId = "bep20"; // ✅ Default system id
 
-             // Monthly profit by plan
-             const monthlyProfit = amount * (selectedPlan.monthlyPercent / 100);
+    // ===== Formatting function =====
+    function fmt(num, currency) {
+        if (currency === 'USD') return Number(num).toFixed(2);
+        if (currency === 'BTC' || currency === 'ETH') return Number(num).toFixed(8).replace(/\.?0+$/, '');
+        return Number(num).toFixed(4).replace(/\.?0+$/, '');
+    }
 
-             // Total return = 2X principal (as requested)
-             const totalReturn = amount * 2;
-
-             // USD hint for profit
-             const profitUsd = monthlyProfit * rateToUsd;
-
-             summaryPlanEl.textContent = selectedPlan.name;
-             summaryProfitEl.textContent = `+ ${fmt(monthlyProfit, selectedCurrency)} ${selectedCurrency}`;
-             summaryTotalEl.textContent = `${fmt(totalReturn, selectedCurrency)} ${selectedCurrency}`;
-             summaryProfitUsdEl.textContent = selectedCurrency !== 'USD' ?
-                 `≈ $${profitUsd.toFixed(2)}` :
-                 '';
-         }
-
-         // Plan selection
-         plansContainer.addEventListener('click', (e) => {
-             const card = e.target.closest('.plan-card');
-             if (!card) return;
-
-             plansContainer.querySelectorAll('.plan-card').forEach(c => c.classList.remove('selected'));
-             card.classList.add('selected');
-
-             const planId = parseInt(card.dataset.planId, 10);
-             selectedPlan = plans.find(p => p.id === planId);
-             selectedPlanInput.value = planId;
-
-             calc();
-         });
-
-         // Crypto selection
-         cryptoContainer.addEventListener('click', (e) => {
-             const card = e.target.closest('.crypto-card');
-             if (!card) return;
-
-             cryptoContainer.querySelectorAll('.crypto-card').forEach(c => c.classList.remove(
-                 'selected'));
-             card.classList.add('selected');
-            // console.log(card);
-             selectedCurrency = card.dataset.currency;
-             selectedSystemId = card.dataset.systemid;
-            selectedSystemInput.value = selectedSystemId;
-             amountCurrencySymbolEl.textContent = selectedCurrency;
-            
-
-             calc();
-         });
-
-         // Amount typing
-         amountInput.addEventListener('input', calc);
-
-        // Initial Selection and Calculation
-        const firstPlan = plansContainer.querySelector('.plan-card');
-        if (firstPlan) {
-            firstPlan.click();
-        }
-        
-        const firstCrypto = cryptoContainer.querySelector('.crypto-card');
-        if (firstCrypto) {
-            firstCrypto.click();
+    // ===== Calculation function =====
+    function calc() {
+        if (!selectedPlan || !selectedCurrency) {
+            summaryProfitEl.textContent = selectedCurrency;
+            summaryTotalEl.textContent = '...';
+            return;
         }
 
-        calculate();
+        const raw = (amountInput.value || '').toString().replace(',', '.');
+        const amount = parseFloat(raw) || 0;
+        const rateToUsd = rates["USDT"] || 0; // all default to USDT conversion
+
+        const monthlyProfit = amount * (selectedPlan.monthlyPercent / 100);
+        const totalReturn = amount * 2;
+        const profitUsd = monthlyProfit * rateToUsd;
+
+        summaryPlanEl.textContent = selectedPlan.name;
+        summaryProfitEl.textContent = `${selectedCurrency}`;
+        summaryTotalEl.textContent = `$${selectedPlan.monthlyPercent}`;
+        summaryProfitUsdEl.textContent = selectedCurrency !== 'USD' ? `≈ $${profitUsd.toFixed(2)}` : '';
+    }
+
+    // ===== Plan Selection =====
+    plansContainer.addEventListener('click', (e) => {
+        const card = e.target.closest('.plan-card');
+        if (!card) return;
+
+        plansContainer.querySelectorAll('.plan-card').forEach(c => c.classList.remove('selected'));
+        card.classList.add('selected');
+
+        const planId = parseInt(card.dataset.planId, 10);
+        selectedPlan = plans.find(p => p.id === planId);
+        selectedPlanInput.value = planId;
+
+        amountInput.value = selectedPlan.monthlyPercent;
+        calc();
     });
-    </script>
+
+    // ===== Crypto Selection =====
+    cryptoContainer.addEventListener('click', (e) => {
+        const card = e.target.closest('.crypto-card');
+        if (!card) return;
+
+        cryptoContainer.querySelectorAll('.crypto-card').forEach(c => c.classList.remove('selected'));
+        card.classList.add('selected');
+
+        selectedCurrency = card.querySelector('.crypto-name').textContent.trim();
+        selectedSystemId = card.dataset.systemid;
+
+        selectedSystemInput.value = selectedSystemId;
+        amountCurrencySymbolEl.textContent = selectedCurrency;
+        calc();
+    });
+
+    // ===== Default select BEP20 =====
+    const defaultCard = cryptoContainer.querySelector('[data-systemid="bep20"]');
+    if (defaultCard) {
+        defaultCard.classList.add('selected');
+    }
+
+    // ===== Default select first plan =====
+    const firstPlan = plansContainer.querySelector('.plan-card');
+    if (firstPlan) firstPlan.click();
+
+    // ===== Initial Summary =====
+    calc();
+});
+</script>
+
+
+
+
+
+<script>
+(function(){
+  const $ = (sel, root=document) => root.querySelector(sel);
+
+  // Tiny toast
+  function toast(msg){
+    const n = document.createElement('div');
+    n.textContent = msg;
+    n.style.cssText = `
+      position:fixed; bottom:18px; left:50%; transform:translateX(-50%);
+      background:#2b2f36; color:#e6e8eb; border:1px solid #3a3f47; padding:10px 14px;
+      border-radius:10px; font-weight:600; z-index:9999;`;
+    document.body.appendChild(n);
+    setTimeout(() => n.remove(), 1400);
+  }
+
+  async function copyText(text){
+    try { await navigator.clipboard.writeText(text); toast('Copied!'); }
+    catch { toast('Copy failed'); }
+  }
+
+  // PUBLIC: call this with your backend JSON payload
+  window.renderPaymentPanel = function(payload){
+    const { address, amount, currency, network, qrcodeSvg } = payload || {};
+    const panel = document.getElementById('payment-panel');
+    if (!panel) return;
+
+       // hide calculator when showing QR
+    const calcCard = document.querySelector('.calculator-card');
+    if (calcCard) calcCard.style.display = 'none';
+
+    
+    panel.innerHTML = `
+      <h3 class="pay-title">4. Complete Your Payment</h3>
+      <div class="pay-grid">
+        <div class="pay-qr">${qrcodeSvg || ''}</div>
+        <div class="pay-right">
+          <div class="pay-meta">
+            <span class="pay-badge">Network</span>
+            <span class="pay-value">${network || '-'}</span>
+          </div>
+
+          <div class="pay-amount">
+            <div class="pay-amount-label">Pay Amount</div>
+            <div class="pay-amount-value">${amount || '0'} <span>${currency || ''}</span></div>
+          </div>
+
+          <label class="pay-label">Wallet Address</label>
+          <div class="pay-copyrow">
+            <input class="pay-input" id="payAddress" value="${address || ''}" readonly />
+            <button class="pay-btn ghost" id="btnCopyAddr" type="button">Copy</button>
+          </div>
+
+          <label class="pay-label">Exact Amount</label>
+          <div class="pay-copyrow">
+            <input class="pay-input" id="payAmount" value="${amount || '0'}" readonly />
+            <button class="pay-btn ghost" id="btnCopyAmt" type="button">Copy</button>
+          </div>
+
+          <div class="pay-note">
+            Send exactly <strong>${amount || '0'} ${currency || ''}</strong> on
+            <strong>${network || '-'}</strong> to the address above. Network or amount
+            mismatches may delay confirmation.
+          </div>
+
+          <div class="pay-actions">
+            <button type="button" class="pay-btn back" id="btnBack">← Back</button>
+           
+          </div>
+        </div>
+      </div>
+    `;
+    panel.style.display = '';
+
+    // Wire buttons
+    $('#btnCopyAddr', panel)?.addEventListener('click', () => {
+      copyText($('#payAddress', panel)?.value || '');
+    });
+    $('#btnCopyAmt', panel)?.addEventListener('click', () => {
+      copyText($('#payAmount', panel)?.value || '');
+    });
+    $('#btnBack', panel)?.addEventListener('click', () => {
+      panel.style.display = 'none';
+       const calcCard = document.querySelector('.calculator-card');
+    if (calcCard) calcCard.style.display = 'block';
+    });
+    $('#btnIHavePaid', panel)?.addEventListener('click', () => {
+      toast('Payment will be detected automatically after confirmation.');
+    });
+  };
+})();
+</script>
+
+ <script>
+(function(){
+  const formEl              = document.getElementById('investment-form');
+  const investBtn           = formEl.querySelector('.btn-invest');
+  const amountInput         = document.getElementById('amount-input');
+
+  const selectedPlanInput   = document.getElementById('selected-plan-input');
+  const selectedSystemInput = document.getElementById('selected-system-input');
+
+  const summaryPlanEl       = document.getElementById('summary-plan');
+  const summaryProfitEl     = document.getElementById('summary-profit');
+  const summaryTotalEl      = document.getElementById('summary-total');
+
+  const paymentPanel        = document.getElementById('payment-panel');
+
+  // Small helper: loader state on button
+  function setLoading(btn, on, text='Invest Now'){
+    if (!btn) return;
+    if (on) {
+      btn.dataset.label = btn.textContent.trim();
+      btn.innerHTML = `<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Generating address…`;
+      btn.disabled = true;
+    } else {
+      btn.textContent = btn.dataset.label || text;
+      btn.disabled = false;
+    }
+  }
+
+  // Copy helper
+  async function copyText(text){
+    try {
+      await navigator.clipboard.writeText(text);
+      alert('Copied!');
+    } catch (e){
+      alert('Copy failed');
+    }
+  }
+
+
+  // Submit handler -> AJAX quote
+  formEl.addEventListener('submit', async (e) => {
+    e.preventDefault();
+
+    const amount = parseFloat((amountInput.value || '0').toString().replace(',', '.')) || 0;
+    const planId = selectedPlanInput.value;
+    const system = selectedSystemInput.value; // bep20 | trc20
+    const currency = 'USDT';                 // from your selection; here fixed
+
+    if (!planId)  return alert('Please select a plan.');
+    if (!system)  return alert('Please select a payment network.');
+    if (!amount || amount <= 0) return alert('Please enter a valid amount.');
+
+    setLoading(investBtn, true);
+
+    try {
+      const res = await fetch(`{{ route('user.quotes') }}`,
+      
+      
+       {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-CSRF-TOKEN': '{{ csrf_token() }}',
+          'Accept': 'application/json',
+        },
+        body: JSON.stringify({ plan_id: planId, system, currency, amount })
+      });
+
+      const json = await res.json();
+      if (!res.ok || !json.ok) {
+        throw new Error(json?.message || 'Failed to create payment quote.');
+      }
+
+      // Show the payment panel with QR + address
+      renderPaymentPanel(json);
+      // Optionally scroll to the payment panel
+      paymentPanel.scrollIntoView({ behavior:'smooth', block:'start' });
+
+    } catch (err) {
+      console.error(err);
+      alert(err.message || 'Something went wrong.');
+    } finally {
+      setLoading(investBtn, false);
+    }
+  });
+})();
+</script>
 
  </body>
 
