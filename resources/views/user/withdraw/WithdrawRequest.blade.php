@@ -703,6 +703,36 @@
              }
          }
      </style>
+
+     <style>
+         .withdraw-table {
+             width: 100%;
+             border-collapse: collapse;
+
+             background-color: transparent;
+         }
+
+         .withdraw-table th,
+         .withdraw-table td {
+             padding: 8px;
+             text-align: left;
+             color: #fff;
+             border-bottom: 1px solid #323232ff;
+         }
+
+         @media (max-width: 480px) {
+             .withdraw-table {
+                 margin: 0 auto;
+                 display: block;
+             }
+
+             .withdraw-table th,
+             .withdraw-table td {
+                 font-size: 13px;
+                 padding: 6px;
+             }
+         }
+     </style>
      <main class="withdrawal-wrapper">
          <div class="page-header">
              <h1>Withdraw <span>Funds</span></h1>
@@ -768,37 +798,33 @@
                              No withdrawal history yet.
                          </p>
                          @else
-                         <!-- ✅ Scrollable wrapper -->
                          <div style="
-                                overflow-x: auto;
-                                -webkit-overflow-scrolling: touch;
-                                border-radius: 8px;
+                             overflow-x:auto;
                             ">
-                             <table class="withdraw-table"
-                                 style="width:100%; border-collapse: collapse; margin-top: 20px; min-width: 500px;">
+                             <table class="withdraw-table">
                                  <thead>
-                                     <tr style="text-align:left;  color:#fff;">
-                                         <th style="padding:8px;">Sr.no</th>
-                                         <th style="padding:8px;">Amount</th>
-                                         <th style="padding:8px;">Status</th>
-                                         <th style="padding:8px;">Date</th>
+                                     <tr>
+                                         <th>Sr.no</th>
+                                         <th>Amount</th>
+                                         <th>Status</th>
+                                         <th>Date</th>
                                      </tr>
                                  </thead>
                                  <tbody>
                                      @foreach($withdrawals as $key => $withdraw)
-                                     <tr style="border-bottom:1px solid #323232ff; color:gray;">
-                                         <td style="padding:8px;">{{ $key + 1 }}</td>
-                                         <td style="padding:8px;">₹{{ number_format($withdraw->amount, 2) }}</td>
-                                         <td style="padding:8px; color:
-                            {{ $withdraw->status == 'completed' ? 'green' : ($withdraw->status == 'pending' ? 'orange' : 'red') }}">
+                                     <tr>
+                                         <td>{{ $key + 1 }}</td>
+                                         <td>₹{{ number_format($withdraw->amount, 2) }}</td>
+                                         <td style="color:
+                                           {{ $withdraw->status == 'completed' ? 'green' : ($withdraw->status == 'pending' ? 'orange' : 'red') }}">
                                              {{ ucfirst($withdraw->status) }}
                                          </td>
-                                         <td style="padding:8px;">{{ $withdraw->created_at->format('d M Y') }}</td>
+                                         <td>{{ $withdraw->created_at->format('d M Y') }}</td>
                                      </tr>
                                      @endforeach
                                  </tbody>
                              </table>
-                             <style></style>
+
                          </div>
                          @endif
                      </section>
@@ -839,14 +865,7 @@
 
                              <div class="summary-block">
                                  <h3>3. Confirm Withdrawal</h3>
-                                 <!-- <div class="summary-row">
-                                     <span class="label">Entered Amount</span>
-                                     <span class="value" id="summary-amount">0.00 USDT</span>
-                                 </div>
-                                 <div class="summary-row">
-                                     <span class="label">Charge(5%)</span>
-                                     <span class="value receive" id="summary-charge">0.00 USDT</span>
-                                 </div> -->
+
                                  <div class="summary-row">
 
                                      <span class="label">You will
@@ -856,9 +875,26 @@
                                          USDT</span>
                                  </div>
                              </div>
+                             <!-- OTP Modal -->
+                             <div id="wallet-modal" class="modal-overlay">
+                                 <div class="modal-content">
+                                     <h3>Verify OTP</h3>
+                                     <p>Please enter the OTP sent to your registered email.</p>
+                                     <div class="input-group">
+                                         <label for="otp-input" class="input-group-label">Verification Code</label>
+                                         <input id="otp-input" class="input-field" name="code" type="text" placeholder="Enter verification code" required>
+                                     </div>
+                                     <div class="modal-buttons">
+                                         <button type="button" id="modal-close-btn" class="btn-withdraw btn-cancel" style="font-family: Anta;">Cancel</button>
+                                         <button type="button" id="verify-otp-btn" class="btn-withdraw" style="font-family: Anta;">Submit</button>
+                                     </div>
+                                 </div>
+                             </div>
 
-                             <button class="btn-withdraw"
-                                 type="submit" style="font-family: Anta;">Withdraw</button>
+                             <button type="button" id="send-otp-btn" class="btn-withdraw" style="font-family: Anta;">Confirm</button>
+
+                             <button type="submit" id="save-wallet-btn" class="btn-withdraw" style="display:none;font-family: Anta;">Withdraw</button>
+
                          </div>
                      </section>
                  </div>
@@ -871,8 +907,8 @@
      <div id="wallet-modal" class="modal-overlay">
          <div class="modal-content">
              <form id="modal-wallet-form"
-                 action="{{route('user.wallet_change')}}" method="post">
-                 @csrf
+                 action="" method="post">
+
                  <h3>Wallet Required</h3>
                  <p>
                      TooDRAW to <strong id="modal-system-name-wrapper"><span
@@ -890,6 +926,82 @@
              </form>
          </div>
      </div>
+     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+     <script>
+         $(document).ready(function() {
+
+             const modal = $('#wallet-modal');
+             const sendOtpBtn = $('#send-otp-btn');
+             const saveWalletBtn = $('#save-wallet-btn');
+             const otpStatus = $('#otp-status');
+             const otpInput = $('#otp-input');
+             const userEmail = $('#userEmail').val();
+
+             sendOtpBtn.on('click', function() {
+
+                 $.ajax({
+                     url: "{{ route('user.send-otp') }}",
+                     method: "POST",
+                     data: {
+                         _token: "{{ csrf_token() }}",
+                         email: userEmail
+                     },
+                     beforeSend: function() {
+                         sendOtpBtn.text('Sending...');
+                         sendOtpBtn.prop('disabled', true);
+                     },
+                     success: function(response) {
+                         notify('success', '✅ OTP Sent Successfully:');
+                         modal.addClass('visible'); // ✅ show modal properly
+                     },
+                     error: function(xhr) {
+                         // console.error("❌ Error sending OTP:", xhr.responseText);
+                         notify('warning', 'Failed to send OTP. Please check console for details.');
+
+                     },
+                     complete: function() {
+                         sendOtpBtn.text('Confirm');
+                         sendOtpBtn.prop('disabled', false);
+                     }
+                 });
+             });
+
+             // ✅ Step 2: Close modal manually
+             $('#modal-close-btn').on('click', function() {
+                 // console.log("❎ User closed OTP modal.");
+                 modal.removeClass('visible');
+             });
+
+             // ✅ Step 3: Verify OTP (only hide popup and unlock Save Wallet)
+             $('#verify-otp-btn').on('click', function() {
+                 const code = otpInput.val().trim();
+                 // console.log("🔢 OTP entered:", code);
+
+                 if (!code) {
+                     notify('warning', '⚠️ Please enter the OTP!');
+                     return;
+                 }
+
+                 // console.log("✅ OTP entered, hiding popup...");
+                 modal.removeClass('visible'); // ✅ hide modal on verify
+
+                 otpStatus.show();
+                 sendOtpBtn.hide();
+                 saveWalletBtn.show();
+
+                 // console.log("🎯 OTP Verified (Frontend). Save Wallets button now visible.");
+             });
+
+             // Optional: clicking outside modal closes it
+             $(window).on('click', function(e) {
+                 if ($(e.target).is(modal)) {
+                     // console.log("🖱️ Clicked outside modal, closing it.");
+                     modal.removeClass('visible');
+                 }
+             });
+         });
+     </script>
 
      <script>
          const ALL_WALLET_FIELDS = [{
@@ -992,7 +1104,7 @@
                  if (radio) radio.checked = true;
 
                  amountCurrencySymbolEl.textContent = selectedCrypto;
-                 availableBalanceEl.textContent = `${selectedBalance.toFixed(selectedDecimals)} ${selectedCrypto}`;
+                 //  availableBalanceEl.textContent = `${selectedBalance.toFixed(selectedDecimals)} ${selectedCrypto}`;
                  walletAddressInput.value = balanceCard.dataset.walletValue || 'Wallet not saved';
                  amountInput.value = '';
 

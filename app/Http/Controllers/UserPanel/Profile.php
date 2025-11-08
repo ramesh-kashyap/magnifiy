@@ -123,7 +123,8 @@ public function BankDetail()
     public function profile_update(Request $request)
     {
         try{
-            $validation =  Validator::make($request->all(), [
+
+                $validation =  Validator::make($request->all(), [
                 'email' => 'required|string',
                 'name' => 'required|string',
                 'country' => 'required|string',
