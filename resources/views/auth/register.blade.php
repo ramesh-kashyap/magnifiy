@@ -156,12 +156,12 @@
                                 
                                
 
-
 <!-- 
-                                <div class="col-12">
-                                    <h4 class="mb-4 mt-4">Contact Information</h4>
-                                </div> -->
-
+//  <select id="position" class="inpts" name="position">
+                                         
+//                                                 <option value="Left" >Left</option>
+//                                                 <option value="Right" >Right</option>
+//                                             </select> -->
                                 <div class="col-md-6">
                                     <div class="form-group">
                                         <label class="mb-2">Email Address</label>
@@ -187,6 +187,38 @@
                                         </div>
                                     </div>
                                 </div>
+     <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label class="mb-2">Country </label>
+                                        <div class="input-group">
+                                            <span class="input-group-text">
+                                                <i class='bx bx-envelope'></i>
+                                            </span>
+                                            <input type="number" name="phone" value="" class="form-control"
+                                                placeholder="Enter your phone">
+                                        </div>
+                                    </div>
+                                </div>
+
+                                   <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label class="mb-2">Position</label>
+                                        <div class="input-group">
+                                            <span class="input-group-text">
+                                                <i class='bx bx-envelope'></i>
+                                            </span>
+                                          
+                                                <select name="position" class="form-control">
+  <option value="left">Left</option>
+  <option value="right">Right</option>
+</select>
+                                        </div>
+                                    </div>
+                                </div>
+
+
+
+
                                  <div class="col-md-6">
                                     <div class="form-group">
                                         <label class="mb-2">Password</label>

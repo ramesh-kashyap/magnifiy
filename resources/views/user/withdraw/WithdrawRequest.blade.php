@@ -764,7 +764,7 @@
                                  <div class="balance-info">
                                      <div class="crypto-name">USDT
                                          BEP20</div>
-                                     <div class="crypto-amount">0 USDT</div>
+                                     <div class="crypto-amount">USDT</div>
                                  </div>
                              </div>
                              <div class="balance-card " data-currency="USDT"
@@ -782,7 +782,7 @@
                                  <div class="balance-info">
                                      <div class="crypto-name">USDT
                                          TRC20</div>
-                                     <div class="crypto-amount">0 USDT</div>
+                                     <div class="crypto-amount"> USDT</div>
                                  </div>
                              </div>
 

@@ -227,7 +227,7 @@ w
                         </thead>
                         <tbody>
                             @forelse($investments as $investment)
-                            <tr>
+                            <tr style="color:#fff">
                                 <td>${{ number_format($investment->amount, 2) }}</td>
                                 <td>{{ \Carbon\Carbon::parse($investment->sdate)->format('d M Y') }}</td>
                                 <td>${{ number_format($investment->profit ?? 0, 2) }}</td>

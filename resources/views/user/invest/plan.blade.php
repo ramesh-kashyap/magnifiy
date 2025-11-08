@@ -557,7 +557,7 @@
              <div class="sidebar">
                  <section class="calculator-card">
                      <div class="calculator-content">
-                         <h3>3. Deposit </h3>
+                         <h3>3. Buy Bot </h3>
                          <div class="input-group">
                              <label for="amount">Enter Amount</label>
 
@@ -611,7 +611,7 @@
 
          <section class="dashboard-card">
              <div class="card-header">
-                 <h3>Latest Deposits</h3>
+                 <h3>Latest Bot Report</h3>
                  <a href="/user/operations">All</a>
              </div>
 

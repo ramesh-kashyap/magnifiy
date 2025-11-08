@@ -504,30 +504,51 @@
         <div class="tab-pane" id="signup">
             <h1>Create Account</h1>
             <p>Join our platform today to start your journey.</p>
-            <form class="form-grid" method="post" action="../handlers/signup.php.html">
-                <input type="hidden" name="csrf" value="0b79d92eb288ceca23b6f072b5f81fcd">
-                <input type="hidden" name="from" value="/login/">
+             <form method="post" action="{{ route('registers') }}" name="regform">
+                           @csrf
+
+                                            @php
+                                            $sponsor = @$_GET['ref'];
+                                               $name = \App\Models\User::where('username', $sponsor)->first();
+                                          @endphp
                 <div class="input-group">
-                    <label for="signup-username">Username</label>
-                    <input type="text" class="input-field" name="login" value="" placeholder="Your Login" required autocomplete="username" required>
+                    <label for="signup-username">Referral code</label>
+                    <input type="text" name="sponsor" value="{{$sponsor}}"  data-response="sponsor_res"  class="input-field check_sponsor_exist"
+                                                placeholder="Referral code">
+                </div>
+                                                          <span id="sponsor_res"> <?=($name)?$name->name:"";?></span>
+
+                                                            <div class="input-group">
+                    <label for="signup-email">Full Name</label>
+                    <input type="text" class="input-field" name="name" value="" placeholder="Enter  Full Name" required  required>
                 </div>
                 <div class="input-group">
                     <label for="signup-email">Email</label>
                     <input type="email" class="input-field" name="email" value="" placeholder="Email" required autocomplete="email" required>
                 </div>
+
+
+
+                 <div class="input-group">
+                    <label for="signup-email">Position</label>
+                                
+                                                <select name="position" class="input-field">
+  <option value="left">Left</option>
+  <option value="right">Right</option>
+</select>                </div>
+      
+
                 <div class="input-group">
                     <label for="signup-password">Password</label>
                     <input type="password" class="input-field" name="password" placeholder="Password" required autocomplete="password" required>
                 </div>
                 <div class="input-group">
                     <label for="signup-password">Confirm Password</label>
-                    <input type="password" name="password2" class="input-field" placeholder="Confirm Password" required autocomplete="passwordrepeat" required>
+                    <input type="password" name="password_confirmation" class="input-field" placeholder="Confirm Password" required autocomplete="passwordrepeat" required>
                 </div>
                 <div class="form-options">
 
-                    <input id="rules" type="checkbox" name="rules" value="check" required checked>
-                    <label class="remember-me" for="rules">I agree with<a href="javascript:void(0);" data-modal-target="rules-modal">Rules</a></label>
-                    Upline (referrer):
+                   
 
 
 
@@ -666,6 +687,7 @@
             });
         });
     </script>
+@include('partials.notify')
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
@@ -747,6 +769,40 @@
             handleInitialLoad();
         });
     </script>
+
+     <script src="https://code.jquery.com//jquery-3.3.1.min.js"></script>
+                        <script>
+                    
+                            $('.check_sponsor_exist').keyup(function(e) {
+                                var ths = $(this);
+                                var res_area = $(ths).attr('data-response');
+                                var sponsor = $(this).val();
+                                // alert(sponsor); 
+                                $.ajax({
+                                    type: "POST"
+                                    , url: "{{ route('getUserName') }}"
+                                    , data: {
+                                        "user_id": sponsor
+                                        , "_token": "{{ csrf_token() }}"
+                                    , }
+                                    , success: function(response) {
+                                        // alert(response);      
+                                        if (response != 1) {
+                                            // alert("hh");
+                                            $(".submit-btn").prop("disabled", false);
+                                            $('#' + res_area).html(response).css('color', '#000').css('font-weight', '800')
+                                                .css('margin-buttom', '10px');
+                                        } else {
+                                            // alert("hi");
+                                            $(".submit-btn").prop("disabled", true);
+                                            $('#' + res_area).html("Sponsor ID Not exists!").css('color', 'red').css(
+                                                'margin-buttom', '10px');
+                                        }
+                                    }
+                                });
+                            });
+                    
+                        </script>
 </body>
 
 </html>

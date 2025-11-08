@@ -41,16 +41,16 @@
                         <nav role="navigation" class="nav-menu">
                             <a href="{{route('user.dashboard')}}"
                                 class="nav-link  active">Dashboard</a>
+                                   <a href="{{route('user.plan')}}" class="nav-link">
+                                Bot Plan</a>
                             <a href="{{route('user.invest')}}" class="nav-link  ">
                                 Deposit</a>
 
-                                 <a href="{{route('user.plan')}}" class="nav-link">
-                                Bot Plan</a>
+                              
 
                             <a href="{{route('user.Withdraw')}}"
                                 class="nav-link  ">Withdraw</a>
-                            <a href="{{route('user.re-invest')}}"
-                                class="nav-link  ">Re-invest</a>
+                           
                             <a href="{{route('user.DepositHistory')}}"
                                 class="nav-link  ">Transactions</a>
                             <a href="{{route('user.profile')}}"
@@ -941,6 +941,18 @@
                                     d="M12 3v14m0 0l-4-4m4 4l4-4M4 19h16"></path>
                             </svg>
 
+
+                               <span class="menu-title">Bot Plan</span>
+                        </a></li><li class="mobile-menu-item"><a
+                            href="{{route('user.plan')}}">
+
+                            <svg class="menu-icon" viewBox="0 0 24 24"
+                                fill="none" stroke="currentColor"
+                                stroke-width="1.8" stroke-linecap="round"
+                                stroke-linejoin="round" aria-hidden="true">
+                                <path
+                                    d="M12 21V7m0 0l4 4m-4-4l-4 4M4 5h16"></path>
+                            </svg>
                             <span class="menu-title">Deposit</span>
                         </a></li><li class="mobile-menu-item"><a
                             href="{{route('user.Withdraw')}}">
@@ -954,17 +966,7 @@
                             </svg>
 
 
-                                <span class="menu-title">Bot Plan</span>
-                        </a></li><li class="mobile-menu-item"><a
-                            href="{{route('user.plan')}}">
-
-                            <svg class="menu-icon" viewBox="0 0 24 24"
-                                fill="none" stroke="currentColor"
-                                stroke-width="1.8" stroke-linecap="round"
-                                stroke-linejoin="round" aria-hidden="true">
-                                <path
-                                    d="M12 21V7m0 0l4 4m-4-4l-4 4M4 5h16"></path>
-                            </svg>
+                             
 
                             <span class="menu-title">Withdraw</span>
                         </a></li><li class="mobile-menu-item"><a
@@ -981,7 +983,7 @@
                                         fill="#000000" opacity="1"
                                         data-original="#000000"></path></g></svg>
 
-                            <span class="menu-title">Re-invest</span>
+                            <!-- <span class="menu-title">Re-invest</span>
                         </a></li><li class="mobile-menu-item"><a
                             href="{{route('user.DepositHistory')}}">
 
@@ -990,7 +992,7 @@
                                 stroke-width="1.8" stroke-linecap="round"
                                 stroke-linejoin="round" aria-hidden="true">
                                 <path d="M4 7h16M4 12h16M4 17h16"></path>
-                            </svg>
+                            </svg> -->
 
                             <span class="menu-title">Transactions</span>
                         </a></li><li class="mobile-menu-item"><a
@@ -1133,7 +1135,7 @@
     'Dashboard':      'dashboard',
     'Deposit':   'deposit',
     'Withdraw':       'withdraw',
-    'Re-invest':      'reinvest',
+    'plan':      'plan',
     'Transactions':   'transactions',
     'Settings':       'settings',
     'Referral':       'referral',
@@ -1141,7 +1143,7 @@
     'Панель':         'dashboard',
     'Пополнить':      'deposit',
     'Вывод':          'withdraw',
-    'Реинвест':       'reinvest',
+    'Реинвест':       'plan',
     'Транзакции':     'transactions',
     'Настройки':      'settings',
     'Рефералы':       'referral',
