@@ -208,58 +208,7 @@ w
                 </div>
             </section>
 
-            <section class="dashboard-card">
-                <div class="card-header">
-                    <h3>Active &amp; Closed Deposits</h3>
-                    <a href="/user/invest">Investment History</a>
-                </div>
-
-                <div class="history-table-wrapper">
-                    <table class="history-table">
-                        <thead>
-                            <tr>
-                                <th>Amount</th>
-                                <th>Created At</th>
-                                <th>Profit (now)</th>
-                                <th>Progress</th>
-                                <th>Status</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @forelse($investments as $investment)
-                            <tr>
-                                <td>${{ number_format($investment->amount, 2) }}</td>
-                                <td>{{ \Carbon\Carbon::parse($investment->sdate)->format('d M Y') }}</td>
-                                <td>${{ number_format($investment->profit ?? 0, 2) }}</td>
-                                <td>
-                                    <div class="progress-bar-container" style="width:100%; background:#e0e0e0; border-radius:10px; height:8px;">
-                                        <div class="progress-bar"
-                                            style="width: {{ $investment->progress ?? 0 }}%; background: #00b2c8; height:8px; border-radius:10px;">
-                                        </div>
-                                    </div>
-                                    <small>{{ $investment->progress ?? 0 }}%</small>
-                                </td>
-                                <td>
-                                    @if($investment->status == 'active')
-                                    <span style="color:green;font-weight:600;">Active</span>
-                                    @elseif($investment->status == 'decline')
-                                    <span style="color:red;font-weight:600;">Declined</span>
-                                    @else
-                                    <span style="color:gray;">{{ ucfirst($investment->status) }}</span>
-                                    @endif
-                                </td>
-                            </tr>
-                            @empty
-                            <tr>
-                                <td colspan="6" style="text-align:center;color:var(--text-muted);">
-                                    No deposits found.
-                                </td>
-                            </tr>
-                            @endforelse
-                        </tbody>
-                    </table>
-                </div>
-            </section> 
+          
 
 
         </div>
