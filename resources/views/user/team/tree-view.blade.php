@@ -1249,7 +1249,6 @@
                                     } else {
                                         $color = "empty";
                                     }
-                                    # code...
                                 } else {
                                     $color = "empty";
                                 }
